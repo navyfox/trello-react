@@ -1,28 +1,28 @@
-.App {
-  text-align: center;
+/* Some Sass variables */
+body {
+  margin: 0;
+  font-family: 'Roboto';
+  font-size: 14px;
+  line-height: 1.3em;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.ui {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 40px 50px 1fr;
+  background-color: #0079bf;
+  color: #eee;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.navbar {
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
 }
-
-.App-title {
-  font-size: 1.5em;
+.navbar.app {
+  background-color: #0067a3;
+  font-size: 1.5rem;
 }
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.navbar.board {
+  font-size: 1.1rem;
 }
