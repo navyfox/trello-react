@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './List.css';
+import ModalTask from "../ModalTask/ModalTask";
 
 class List extends Component {
     constructor(props) {
@@ -9,9 +10,12 @@ class List extends Component {
             value: '',
             loc: {item1: []}
         };
-        if (localStorage.getItem("myKey") == null) {
+        if (localStorage.getItem("myKey") === null) {
             var serialObj = JSON.stringify(this.state.loc);
             localStorage.setItem("myKey", serialObj);
+        } else {
+            var returnObj = JSON.parse(localStorage.getItem("myKey"));
+            this.state.loc = returnObj;
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,24 +30,20 @@ class List extends Component {
         this.setState({addCard: false});
     }
     rendDefault() {
-        var returnObj = JSON.parse(localStorage.getItem("myKey"));
         return (
             <div className="list">
                 <header>{this.props.title}</header>
-                <ul>
-                    {returnObj.item1.map((item, index) => <li key={index}>{item}</li>)}
-                </ul>
+                <ModalTask/>
                 <footer><a onClick={() => this.setState({addCard: true})} className="add-card">Add a card...</a></footer>
             </div>
         )
     }
     rendAdd() {
-        var returnObj = JSON.parse(localStorage.getItem("myKey"));
         return (
             <div className="list">
                 <header>{this.props.title}</header>
+                <ModalTask/>
                 <ul>
-                    {returnObj.item1.map((item, index) => <li key={index}>{item}</li>)}
                     <li><textarea
                         name="description"
                         onChange={this.handleChange}
