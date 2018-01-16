@@ -24,7 +24,7 @@ class ModalTask extends Component {
         var returnObj = JSON.parse(localStorage.getItem("myKey"));
         return (
             <ul>
-                {returnObj.item1.map((item, index) => <li key={index}><button onClick={this.handleOpenModal}>{item}</button></li>)}
+                {returnObj.item1.map((item, index) => <li key={index}><a onClick={this.handleOpenModal}>{item}</a></li>)}
                 <ReactModal
                     isOpen={this.state.showModal}
                     contentLabel="Minimal Modal Example"

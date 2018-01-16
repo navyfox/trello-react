@@ -48,6 +48,12 @@
     max-height: calc(100% - 36px - 36px);
     overflow-y: auto;
 }
+.list ul a {
+    display: block;
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+}
 .list ul li {
     background-color: #fff;
     padding: 10px;

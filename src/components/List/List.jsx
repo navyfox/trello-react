@@ -3,7 +3,7 @@ import './List.css';
 import ModalTask from "../ModalTask/ModalTask";
 
 class List extends Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
         this.state = {
             addCard: false,
@@ -20,16 +20,16 @@ class List extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    handleChange(event) {
+    handleChange (event) {
         this.setState({value: event.target.value});
     }
-    handleSubmit() {
+    handleSubmit () {
         this.state.loc.item1.push(this.state.value);
         var serialObj = JSON.stringify(this.state.loc);
         localStorage.setItem("myKey", serialObj);
         this.setState({addCard: false});
     }
-    rendDefault() {
+    rendDefault () {
         return (
             <div className="list">
                 <header>{this.props.title}</header>
@@ -38,7 +38,7 @@ class List extends Component {
             </div>
         )
     }
-    rendAdd() {
+    rendAdd () {
         return (
             <div className="list">
                 <header>{this.props.title}</header>
@@ -57,7 +57,7 @@ class List extends Component {
             </div>
         )
     }
-    render() {
+    render () {
         if (this.state.addCard) {
             return (this.rendAdd())
         } else {
