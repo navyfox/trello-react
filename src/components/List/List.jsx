@@ -7,53 +7,45 @@ class List extends Component {
         this.state = {
             addCard: false,
             value: '',
-            obj: {
-                item1: "Lorem ipsum dolor sit amet",
-                item2: "Lorem ipsum dolor sit amet",
-                item3: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec lobortis enim sit amet"
-            },
-            loc: ["Lorem ipsum dolor sit amet", "Lorem ipsum dolor sit amet",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec lobortis enim sit amet"],
+            loc: {item1: []}
         };
+        if (localStorage.getItem("myKey") == null) {
+            var serialObj = JSON.stringify(this.state.loc);
+            localStorage.setItem("myKey", serialObj);
+        }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        // var obj = {
-        //     item1: "Lorem ipsum dolor sit amet",
-        //     item2: "Lorem ipsum dolor sit amet",
-        //     item3: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec lobortis enim sit amet"
-        // };
-        // var serialObj = JSON.stringify(obj);
-        // localStorage.setItem("myKey", serialObj);
-        // var returnObj = JSON.parse(localStorage.getItem("myKey"));
     }
     handleChange(event) {
         this.setState({value: event.target.value});
     }
-    handleSubmit(event) {
-        this.state.loc.push(this.state.value);
+    handleSubmit() {
+        this.state.loc.item1.push(this.state.value);
+        var serialObj = JSON.stringify(this.state.loc);
+        localStorage.setItem("myKey", serialObj);
         this.setState({addCard: false});
-        // alert('Textarea value is: ' + this.state.value);
     }
     rendDefault() {
+        var returnObj = JSON.parse(localStorage.getItem("myKey"));
         return (
             <div className="list">
                 <header>{this.props.title}</header>
                 <ul>
-                    {this.state.loc.map((item, index) => <li key={index}>{item}</li>)}
+                    {returnObj.item1.map((item, index) => <li key={index}>{item}</li>)}
                 </ul>
                 <footer><a onClick={() => this.setState({addCard: true})} className="add-card">Add a card...</a></footer>
             </div>
         )
     }
     rendAdd() {
+        var returnObj = JSON.parse(localStorage.getItem("myKey"));
         return (
             <div className="list">
                 <header>{this.props.title}</header>
                 <ul>
-                    {this.state.loc.map((item, index) => <li key={index}>{item}</li>)}
+                    {returnObj.item1.map((item, index) => <li key={index}>{item}</li>)}
                     <li><textarea
                         name="description"
-                        // value={this.state.value}
                         onChange={this.handleChange}
                     />
                     </li>
@@ -75,3 +67,60 @@ class List extends Component {
 }
 
 export default List;
+
+
+//
+// class Form extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = {
+//             value: '',
+//             loc: {item1: ["1", "2","3"]}
+//         };
+//         var serialObj = JSON.stringify(this.state.loc);
+//         localStorage.setItem("myKey", serialObj);
+//         this.handleChange = this.handleChange.bind(this);
+//         this.handleSubmit = this.handleSubmit.bind(this);
+//     }
+//
+//     handleChange(event) {
+//         this.setState({value: event.target.value});
+//     }
+//
+//     handleSubmit(event) {
+//         this.state.loc.item1.push(this.state.value);
+//         var serialObj = JSON.stringify(this.state.loc);
+//         localStorage.setItem("myKey", serialObj);
+//         alert('Textarea value is: ' + this.state.value);
+//         alert(this.state.loc.item1);
+//         ReactDOM.render(
+//             <Form />,
+//             document.getElementById('root')
+//         );
+//     }
+//
+//     render() {
+//         var returnObj = JSON.parse(localStorage.getItem("myKey"));
+//         return (
+//             <div>
+//                 <ul>
+//                     {returnObj.item1.map((item, index) => <li key={index}>{item}</li>)}
+//                 </ul>
+//                 <textarea
+//                     name="description"
+//                     value={this.state.value}
+//                     onChange={this.handleChange}
+//                 />
+//                 <br />
+//                 <button onClick={this.handleSubmit}>
+//                     Submit
+//                 </button>
+//             </div>
+//         );
+//     }
+// }
+//
+// ReactDOM.render(
+//     <Form />,
+//     document.getElementById('root')
+// );
