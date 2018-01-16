@@ -44,7 +44,7 @@ class List extends Component {
                 <header>{this.props.title}</header>
                 <ModalTask/>
                 <ul>
-                    <li><textarea
+                    <li className="text-area"><textarea
                         name="description"
                         onChange={this.handleChange}
                     />

@@ -79,3 +79,6 @@
     resize: none;
     outline: none;
 }
+.text-area {
+    border-top: 10px solid #e2e4e6;
+}
