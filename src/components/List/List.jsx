@@ -8,14 +8,18 @@ class List extends Component {
         this.state = {
             addCard: false,
             value: '',
+            storage: {
+                task: [
+
+                ]},
             loc: {item1: []}
         };
-        if (localStorage.getItem("myKey") === null) {
-            var serialObj = JSON.stringify(this.state.loc);
-            localStorage.setItem("myKey", serialObj);
+        if (localStorage.getItem("key") === null) {
+            var newSerialObj = JSON.stringify(this.state.storage);
+            localStorage.setItem("key", newSerialObj);
         } else {
-            var returnObj = JSON.parse(localStorage.getItem("myKey"));
-            this.state.loc = returnObj;
+            var returnObj = JSON.parse(localStorage.getItem("key"));
+            this.state.storage = returnObj;
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -24,11 +28,19 @@ class List extends Component {
         this.setState({value: event.target.value});
     }
     handleSubmit () {
-        this.state.loc.item1.push(this.state.value);
-        var serialObj = JSON.stringify(this.state.loc);
-        localStorage.setItem("myKey", serialObj);
+        this.state.storage.task.push({"title": this.state.value});
+        var newSerialObj = JSON.stringify(this.state.storage);
+        localStorage.setItem("key", newSerialObj);
         this.setState({addCard: false});
     }
+    // handleSubmitEnter (event) {
+    //     if (event.key === 'Enter') {
+    //         this.state.storage.task.push({"title": this.state.value});
+    //         var newSerialObj = JSON.stringify(this.state.storage);
+    //         localStorage.setItem("key", newSerialObj);
+    //         this.setState({addCard: false});
+    //     }
+    // }
     rendDefault () {
         return (
             <div className="list">
@@ -47,6 +59,7 @@ class List extends Component {
                     <li className="text-area"><textarea
                         name="description"
                         onChange={this.handleChange}
+                        // onKeyPress={this.handleSubmitEnter}
                     />
                     </li>
                 </ul>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import './TitleTask.css';
 
-class TitleTask extends Component {
+class Description extends Component {
     constructor(props) {
         super(props);
         var returnObj = JSON.parse(localStorage.getItem("key")).task[this.props.modalIndexItem];
@@ -63,4 +62,4 @@ class TitleTask extends Component {
     }
 }
 
-export default TitleTask;
+export default Description;
