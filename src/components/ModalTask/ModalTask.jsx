@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactModal from 'react-modal';
+import TitleTask from "../TitleTask/TitleTask";
 
 class ModalTask extends Component {
     constructor (props) {
@@ -30,6 +31,7 @@ class ModalTask extends Component {
                     contentLabel="Minimal Modal Example"
                 >
                     <button onClick={this.handleCloseModal}>Close Modal</button>
+                    <TitleTask/>
                 </ReactModal>
             </ul>
         );
