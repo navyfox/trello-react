@@ -4,49 +4,47 @@ class Description extends Component {
     constructor(props) {
         super(props);
         var returnObj = JSON.parse(localStorage.getItem("key")).task[this.props.modalIndexItem];
-        // this.state.storage = returnObj;
         console.log(returnObj);
         this.state = {
-            titleEdit: false,
+            edit: false,
             storage: returnObj,
-            title: returnObj.title,
+            description: returnObj.description,
         };
-        // var returnObj = JSON.parse(localStorage.getItem("key"));
-        // this.state.storage = returnObj;
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-
     handleChange(event) {
-        this.setState({title: event.target.value});
+        this.setState({description: event.target.value});
     }
-
     handleSubmit(event) {
         if (event.key === 'Enter') {
-            this.setState({ titleEdit: false});
-            this.state.storage.title = this.state.title;
+            this.setState({ edit: false});
+            this.state.storage.description = this.state.description;
             var returnObj = JSON.parse(localStorage.getItem("key"));
-            returnObj.task[this.props.modalIndexItem].title = this.state.title;
+            returnObj.task[this.props.modalIndexItem].description = this.state.description;
             var newSerialObj = JSON.stringify(returnObj);
             localStorage.setItem("key", newSerialObj);
             console.log(this.state.storage);
-
         }
     }
     renderDefault () {
+        if (this.state.description === undefined) {
+            var description = "DESCRIPTION";
+        } else {
+            var description = this.state.description
+        }
         return (
             <div>
-                <div className="title" onClick={() => this.setState({ titleEdit: true })}>{this.state.title}</div>
+                <div className="title" onClick={() => this.setState({ edit: true })}>{description}</div>
             </div>
         );
     }
-
     renderEdit () {
         return (
             <div>
                 <textarea
                     name="description"
-                    value={this.state.title}
+                    value={this.state.description}
                     onChange={this.handleChange}
                     onKeyPress={this.handleSubmit}
                 />
@@ -54,7 +52,7 @@ class Description extends Component {
         );
     }
     render () {
-        if (this.state.titleEdit) {
+        if (this.state.edit) {
             return (this.renderEdit())
         } else {
             return (this.renderDefault())

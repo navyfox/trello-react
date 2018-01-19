@@ -19,7 +19,11 @@ class TitleTask extends Component {
     }
 
     handleChange(event) {
-        this.setState({title: event.target.value});
+        if (event.target.value === "") {
+
+        } else {
+            this.setState({title: event.target.value});
+        }
     }
 
     handleSubmit(event) {
