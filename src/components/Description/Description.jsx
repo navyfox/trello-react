@@ -4,7 +4,7 @@ class Description extends Component {
     constructor(props) {
         super(props);
         var returnObj = JSON.parse(localStorage.getItem("key")).task[this.props.modalIndexItem];
-        console.log(returnObj);
+        // console.log(returnObj);
         this.state = {
             edit: false,
             storage: returnObj,
@@ -24,7 +24,7 @@ class Description extends Component {
             returnObj.task[this.props.modalIndexItem].description = this.state.description;
             var newSerialObj = JSON.stringify(returnObj);
             localStorage.setItem("key", newSerialObj);
-            console.log(this.state.storage);
+            // console.log(this.state.storage);
         }
     }
     renderDefault () {

@@ -10,7 +10,6 @@ class ModalTask extends Component {
             showModal: false,
             modalIndexItem: null
         };
-
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
     }
@@ -25,6 +24,15 @@ class ModalTask extends Component {
         this.setState({ showModal: false, modalIndexItem: null });
     }
 
+    deleteTask () {
+        var returnObj = JSON.parse(localStorage.getItem("key"));
+        returnObj["task"].splice(this.state.modalIndexItem, 1);
+        localStorage.removeItem("key");
+        var newSerialObj = JSON.stringify(returnObj);
+        localStorage.setItem("key", newSerialObj);
+        this.setState({ showModal: false});
+    }
+
     render () {
         var returnObj = JSON.parse(localStorage.getItem("key"));
         return (
@@ -35,6 +43,7 @@ class ModalTask extends Component {
                     contentLabel="Minimal Modal Example"
                 >
                     <button onClick={this.handleCloseModal}>Close Modal</button>
+                    <button onClick={() => this.deleteTask()}>DELETE TASK</button>
                     <TitleTask modalIndexItem={this.state.modalIndexItem}/>
                     <Description modalIndexItem={this.state.modalIndexItem}/>
                 </ReactModal>
