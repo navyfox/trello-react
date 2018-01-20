@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactModal from 'react-modal';
 import TitleTask from "../TitleTask/TitleTask";
 import Description from "../Description/Description";
+import Comment from "../Comment/Comment";
 
 class ModalTask extends Component {
     constructor (props) {
@@ -46,6 +47,7 @@ class ModalTask extends Component {
                     <button onClick={() => this.deleteTask()}>DELETE TASK</button>
                     <TitleTask modalIndexItem={this.state.modalIndexItem}/>
                     <Description modalIndexItem={this.state.modalIndexItem}/>
+                    <Comment modalIndexItem={this.state.modalIndexItem}/>
                 </ReactModal>
             </ul>
         );

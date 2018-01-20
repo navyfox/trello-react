@@ -48,6 +48,9 @@
     max-height: calc(100% - 36px - 36px);
     overflow-y: auto;
 }
+.comment {
+    max-height: calc(56% - 36px - 36px);
+}
 .list ul a {
     display: block;
     height: 100%;

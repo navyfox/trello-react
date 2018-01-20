@@ -4,7 +4,6 @@ class Description extends Component {
     constructor(props) {
         super(props);
         var returnObj = JSON.parse(localStorage.getItem("key")).task[this.props.modalIndexItem];
-        // console.log(returnObj);
         this.state = {
             edit: false,
             storage: returnObj,
@@ -14,7 +13,9 @@ class Description extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleChange(event) {
-        this.setState({description: event.target.value});
+        if (event.target.value === "") {} else {
+            this.setState({description: event.target.value});
+        }
     }
     handleSubmit(event) {
         if (event.key === 'Enter') {
@@ -24,7 +25,6 @@ class Description extends Component {
             returnObj.task[this.props.modalIndexItem].description = this.state.description;
             var newSerialObj = JSON.stringify(returnObj);
             localStorage.setItem("key", newSerialObj);
-            // console.log(this.state.storage);
         }
     }
     renderDefault () {
