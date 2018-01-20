@@ -51,6 +51,9 @@
 .comment {
     max-height: calc(56% - 36px - 36px);
 }
+.comment_link {
+    cursor: pointer;
+}
 .list ul a {
     display: block;
     height: 100%;

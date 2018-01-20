@@ -20,14 +20,7 @@ class ItemComments extends Component {
     render () {
         if (this.state.noDelete) {
             return (
-                <div className="list comment">
-                    <ul>
-                        <li>{this.props.item}</li>
-                    </ul>
-                    <footer>
-                        <a onClick={this.deleteComment}>DELETE</a>
-                    </footer>
-                </div>
+                <div className="comment"><h4>{this.props.item}</h4><a className="comment_link" onClick={this.deleteComment}>DELETE</a></div>
             );
         } else {
             //{this.props.item}
