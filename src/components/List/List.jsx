@@ -8,7 +8,15 @@ class List extends Component {
         this.state = {
             addCard: false,
             value: '',
+            storage: {
+                task: []},
         };
+        if (localStorage.getItem("key") === null) {
+            let newSerialObj = JSON.stringify(this.state.storage);
+            localStorage.setItem("key", newSerialObj);
+        } else {
+            this.state.storage = JSON.parse(localStorage.getItem("key"));
+        }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -16,9 +24,9 @@ class List extends Component {
         this.setState({value: event.target.value});
     }
     handleSubmit () {
-        var returnObj = JSON.parse(localStorage.getItem("key"));
+        let returnObj = JSON.parse(localStorage.getItem("key"));
         returnObj.task.push({"title": this.state.value});
-        var newSerialObj = JSON.stringify(returnObj);
+        let newSerialObj = JSON.stringify(returnObj);
         localStorage.setItem("key", newSerialObj);
         this.setState({addCard: false});
     }
@@ -38,9 +46,8 @@ class List extends Component {
                 <ModalTask/>
                 <ul>
                     <li className="text-area"><textarea
-                        name="description"
+                        name="list"
                         onChange={this.handleChange}
-                        // onKeyPress={this.handleSubmitEnter}
                     />
                     </li>
                 </ul>

@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactModal from 'react-modal';
 import TitleTask from "../TitleTask/TitleTask";
 import Description from "../Description/Description";
 import Comment from "../Comment/Comment";
 
 class ModalTask extends Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
             showModal: false,
@@ -14,31 +14,30 @@ class ModalTask extends Component {
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
     }
-    handleOpenModal (index) {
-        this.setState({
-            showModal: true,
-            modalIndexItem: index,
-        });
+
+    handleOpenModal(index) {
+        this.setState({showModal: true, modalIndexItem: index});
     }
 
-    handleCloseModal () {
-        this.setState({ showModal: false, modalIndexItem: null });
+    handleCloseModal() {
+        this.setState({showModal: false, modalIndexItem: null});
     }
 
-    deleteTask () {
-        var returnObj = JSON.parse(localStorage.getItem("key"));
+    deleteTask() {
+        let returnObj = JSON.parse(localStorage.getItem("key"));
         returnObj["task"].splice(this.state.modalIndexItem, 1);
         localStorage.removeItem("key");
-        var newSerialObj = JSON.stringify(returnObj);
+        let newSerialObj = JSON.stringify(returnObj);
         localStorage.setItem("key", newSerialObj);
-        this.setState({ showModal: false});
+        this.setState({showModal: false});
     }
 
-    render () {
-        var returnObj = JSON.parse(localStorage.getItem("key"));
+    render() {
+        let arr = JSON.parse(localStorage.getItem("key"));
         return (
             <ul>
-                {returnObj.task.map((item, index) => <li key={index}><a onClick={() => this.handleOpenModal(index)}>{item["title"]}</a></li>)}
+                {arr.task.map((item, index) => <li key={index}><a
+                    onClick={() => this.handleOpenModal(index)}>{item["title"]}</a></li>)}
                 <ReactModal
                     isOpen={this.state.showModal}
                     contentLabel="Minimal Modal Example"
@@ -53,4 +52,5 @@ class ModalTask extends Component {
         );
     }
 }
+
 export default ModalTask;
