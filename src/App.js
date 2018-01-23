@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import List from './components/List/List';
+import Board from './components/Board/Board';
 
 class App extends Component {
   render() {
@@ -8,9 +8,7 @@ class App extends Component {
         <div className="ui">
             <nav className="navbar app">App bar</nav>
             <nav className="navbar board">Board bar</nav>
-            <div className="lists">
-                <List title='List header'/>
-            </div>
+            <Board/>
         </div>
     );
   }

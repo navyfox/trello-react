@@ -1,0 +1,22 @@
+.add-list {
+    display: block;
+    line-height: 36px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+}
+.add-list a {
+    display: block;
+    cursor: pointer;
+}
+.add-list textarea {
+    font-size: 14px;
+    width: 98%;
+    height: 100%;
+    margin-top: 12px;
+    border: none;
+    background-color: white;
+    resize: none;
+    border-radius: 5px;
+    outline: none;
+}

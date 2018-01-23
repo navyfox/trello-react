@@ -33,7 +33,7 @@ class List extends Component {
     rendDefault () {
         return (
             <div className="list">
-                <header>{this.props.title}</header>
+                <header>{this.props.name}</header>
                 <ModalTask/>
                 <footer><a onClick={() => this.setState({addCard: true})} className="add-card">Add a card...</a></footer>
             </div>

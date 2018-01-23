@@ -36,6 +36,7 @@
 }
 .list footer a {
     cursor: pointer;
+    display: block;
 }
 .list footer input {
     width: 100px;
@@ -82,6 +83,7 @@
     height: 100%;
     border: none;
     background-color: transparent;
+    border-radius: 5px;
     resize: none;
     outline: none;
 }
