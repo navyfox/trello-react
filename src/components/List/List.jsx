@@ -1,49 +1,52 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './List.css';
 import ModalTask from "../ModalTask/ModalTask";
 
 class List extends Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
             addCard: false,
             value: '',
-            storage: {
-                task: []},
         };
-        if (localStorage.getItem("key") === null) {
-            let newSerialObj = JSON.stringify(this.state.storage);
-            localStorage.setItem("key", newSerialObj);
-        } else {
-            this.state.storage = JSON.parse(localStorage.getItem("key"));
-        }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    handleChange (event) {
+
+    handleChange(event) {
         this.setState({value: event.target.value});
     }
-    handleSubmit () {
+
+    handleSubmit() {
         let returnObj = JSON.parse(localStorage.getItem("key"));
-        returnObj.task.push({"title": this.state.value});
+        returnObj[this.props.listName].push({"title": this.state.value});
         let newSerialObj = JSON.stringify(returnObj);
         localStorage.setItem("key", newSerialObj);
         this.setState({addCard: false});
     }
-    rendDefault () {
+
+    rendDefault() {
         return (
             <div className="list">
-                <header>{this.props.name}</header>
-                <ModalTask/>
-                <footer><a onClick={() => this.setState({addCard: true})} className="add-card">Add a card...</a></footer>
+                <header>
+                    {this.props.listName}
+                    <a className="close" onClick={this.props.close}>&times;</a>
+                </header>
+                <ModalTask listName={this.props.listName}/>
+                <footer><a onClick={() => this.setState({addCard: true})} className="add-card">Add a card...</a>
+                </footer>
             </div>
         )
     }
-    rendAdd () {
+
+    rendAdd() {
         return (
             <div className="list">
-                <header>{this.props.title}</header>
-                <ModalTask/>
+                <header>
+                    {this.props.listName}
+                    <a className="close" onClick={this.props.close}>&times;</a>
+                </header>
+                <ModalTask listName={this.props.listName}/>
                 <ul>
                     <li className="text-area"><textarea
                         name="list"
@@ -52,13 +55,15 @@ class List extends Component {
                     </li>
                 </ul>
                 <footer>
-                    <input value="Add" type="submit" onClick={this.handleSubmit}/>
-                    <input value="Delete" type="submit" onClick={() => this.setState({addCard: false})}/>
+                    <input className="left-input" value="Add" type="submit" onClick={this.handleSubmit}/>
+                    <input className="right-input" value="Delete" type="submit"
+                           onClick={() => this.setState({addCard: false})}/>
                 </footer>
             </div>
         )
     }
-    render () {
+
+    render() {
         if (this.state.addCard) {
             return (this.rendAdd())
         } else {

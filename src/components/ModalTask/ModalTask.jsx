@@ -25,7 +25,7 @@ class ModalTask extends Component {
 
     deleteTask() {
         let returnObj = JSON.parse(localStorage.getItem("key"));
-        returnObj["task"].splice(this.state.modalIndexItem, 1);
+        returnObj[this.props.listName].splice(this.state.modalIndexItem, 1);
         localStorage.removeItem("key");
         let newSerialObj = JSON.stringify(returnObj);
         localStorage.setItem("key", newSerialObj);
@@ -36,17 +36,25 @@ class ModalTask extends Component {
         let arr = JSON.parse(localStorage.getItem("key"));
         return (
             <ul>
-                {arr.task.map((item, index) => <li key={index}><a
+                {arr[this.props.listName].map((item, index) => <li key={index}><a
                     onClick={() => this.handleOpenModal(index)}>{item["title"]}</a></li>)}
                 <ReactModal
                     isOpen={this.state.showModal}
-                    contentLabel="Minimal Modal Example"
+                    contentLabel=""
+                    onRequestClose={this.handleCloseModal}
+                    className="open-modal"
+                    ariaHideApp={false}
                 >
-                    <button onClick={this.handleCloseModal}>Close Modal</button>
-                    <button onClick={() => this.deleteTask()}>DELETE TASK</button>
-                    <TitleTask modalIndexItem={this.state.modalIndexItem}/>
-                    <Description modalIndexItem={this.state.modalIndexItem}/>
-                    <Comment modalIndexItem={this.state.modalIndexItem}/>
+                    <div className="header-modal">
+                        <div className="header-modal__left">
+                            <TitleTask listName={this.props.listName} modalIndexItem={this.state.modalIndexItem}/>
+                            <Description listName={this.props.listName} modalIndexItem={this.state.modalIndexItem}/>
+                        </div>
+                        <div className="header-modal__right">
+                            <button className="del-task" onClick={() => this.deleteTask()}><span>DELETE</span></button>
+                        </div>
+                    </div>
+                    <Comment listName={this.props.listName} modalIndexItem={this.state.modalIndexItem}/>
                 </ReactModal>
             </ul>
         );

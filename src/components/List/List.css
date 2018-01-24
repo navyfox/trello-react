@@ -40,7 +40,10 @@
 }
 .list footer input {
     width: 100px;
-    margin-right: 40px;
+    cursor: pointer;
+}
+.left-input {
+    margin-right: 70px;
 }
 .list ul {
     list-style: none;

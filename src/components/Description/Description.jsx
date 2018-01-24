@@ -3,48 +3,50 @@ import React, {Component} from 'react';
 class Description extends Component {
     constructor(props) {
         super(props);
-        let returnObj = JSON.parse(localStorage.getItem("key")).task[this.props.modalIndexItem];
+        let returnObj = JSON.parse(localStorage.getItem("key"))[this.props.listName][this.props.modalIndexItem];
         this.state = {
             edit: false,
             storage: returnObj,
             value: returnObj.description,
+            defaultValue: "Add description...",
         };
-        if (this.state.value === undefined) {
-            this.state.value = "DESCRIPTION";
-        }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(event) {
-        if (event.target.value === "") {
-        } else {
-            this.setState({value: event.target.value});
-        }
+        this.setState({value: event.target.value});
     }
 
     handleSubmit(event) {
         if (event.key === 'Enter') {
-            this.setState({edit: false});
-            this.state.storage.description = this.state.value;
+            let timeVar = this.state.storage;
+            timeVar.description = this.state.value;
+            this.setState({edit: false, storage: timeVar});
             let returnObj = JSON.parse(localStorage.getItem("key"));
-            returnObj.task[this.props.modalIndexItem].description = this.state.value;
+            returnObj[this.props.listName][this.props.modalIndexItem].description = this.state.value;
             let newSerialObj = JSON.stringify(returnObj);
             localStorage.setItem("key", newSerialObj);
         }
     }
 
     renderDefault() {
+        let text;
+        if ((this.state.value === undefined) || (this.state.value === "")) {
+            text = this.state.defaultValue;
+        } else {
+            text= this.state.value;
+        }
         return (
-            <div>
-                <div className="title" onClick={() => this.setState({edit: true})}>{this.state.value}</div>
+            <div className="description-block">
+                <div className="title description" onClick={() => this.setState({edit: true})}>{text}</div>
             </div>
         );
     }
 
     renderEdit() {
         return (
-            <div>
+            <div className="description-block">
                 <textarea
                     name="description"
                     value={this.state.value}

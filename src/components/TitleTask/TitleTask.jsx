@@ -4,7 +4,7 @@ import './TitleTask.css';
 class TitleTask extends Component {
     constructor(props) {
         super(props);
-        let returnObj = JSON.parse(localStorage.getItem("key")).task[this.props.modalIndexItem];
+        let returnObj = JSON.parse(localStorage.getItem("key"))[this.props.listName][this.props.modalIndexItem];
         this.state = {
             titleEdit: false,
             storage: returnObj,
@@ -23,10 +23,11 @@ class TitleTask extends Component {
 
     handleSubmit(event) {
         if (event.key === 'Enter') {
-            this.setState({titleEdit: false});
-            this.state.storage.title = this.state.value;
+            let timeVar = this.state.storage;
+            timeVar.title = this.state.value;
+            this.setState({titleEdit: false, storage: timeVar});
             let returnObj = JSON.parse(localStorage.getItem("key"));
-            returnObj.task[this.props.modalIndexItem].title = this.state.value;
+            returnObj[this.props.listName][this.props.modalIndexItem].title = this.state.value;
             let newSerialObj = JSON.stringify(returnObj);
             localStorage.setItem("key", newSerialObj);
         }
