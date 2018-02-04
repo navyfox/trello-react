@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './Board.css';
 import List from "../List/List";
+import {connect} from 'react-redux';
 
 
 class Board extends Component {
@@ -11,12 +12,6 @@ class Board extends Component {
             flag: true,
             value: '',
         };
-        let returnObj = JSON.parse(localStorage.getItem("key"));
-        if (returnObj === null) {
-            returnObj = {};
-            let newSerialObj = JSON.stringify(returnObj);
-            localStorage.setItem("key", newSerialObj);
-        }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -25,30 +20,19 @@ class Board extends Component {
     }
     handleSubmit(event) {
         if (event.key === 'Enter') {
-            let returnObj = JSON.parse(localStorage.getItem("key"));
-            returnObj[event.target.value] = [];
-            let newSerialObj = JSON.stringify(returnObj);
-            localStorage.setItem("key", newSerialObj);
+            this.props.onAddList(event.target.value);
             this.setState({value: ""});
             this.setState({addList: false});
         }
     }
-    deleteList (item) {
-        let returnObj = JSON.parse(localStorage.getItem("key"));
-        delete returnObj[item];
-        let newSerialObj = JSON.stringify(returnObj);
-        localStorage.setItem("key", newSerialObj);
+    deleteList (index) {
+        this.props.onDelList(index);
         this.setState({flag: !this.state.flag});
     }
     rendDefault () {
-        let returnObj = JSON.parse(localStorage.getItem("key"));
-        let arrayList = [];
-        for (let key in returnObj) {
-            arrayList.unshift(key)
-        }
         return (
             <div className="lists">
-                {arrayList.map((item, index) => <List key={index} listName={item} close={() => this.deleteList(item)}/>)}
+                {this.props.lists.map((item, index) => <List key={index} listName={item.name} close={() => this.deleteList(index)}/>)}
                 <div className="list">
                     <div className="add-list"><a onClick={() => this.setState({addList: true})}>Add new list</a></div>
                 </div>
@@ -56,14 +40,9 @@ class Board extends Component {
         )
     }
     rendAdd () {
-        let returnObj = JSON.parse(localStorage.getItem("key"));
-        let arrayList = [];
-        for (let key in returnObj) {
-            arrayList.unshift(key)
-        }
         return (
             <div className="lists">
-                {arrayList.map((item, index) => <List key={index} listName={item}/>)}
+                {this.props.lists.map((item, index) => <List key={index} listName={item.name} index={index} close={() => this.deleteList(index)}/>)}
                 <div className="list">
                     <div className="add-list">
                         <textarea
@@ -85,4 +64,21 @@ class Board extends Component {
     }
 }
 
-export default Board;
+export default connect(
+    state => ({
+        lists: state.lists
+    }),
+    dispatch => ({
+        onAddList: (name) => {
+            const payload = {
+                id: Date.now().toString(),
+                name,
+                tasks: []
+            };
+            dispatch({ type: 'ADD_LIST', payload });
+        },
+        onDelList: (index) => {
+            dispatch({ type: 'DELETE_LIST', payload: index })
+        }
+    })
+)(Board);

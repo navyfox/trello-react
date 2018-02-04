@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './List.css';
 import ModalTask from "../ModalTask/ModalTask";
+import {connect} from "react-redux";
 
 class List extends Component {
     constructor(props) {
@@ -32,7 +33,7 @@ class List extends Component {
                     {this.props.listName}
                     <a className="close" onClick={this.props.close}>&times;</a>
                 </header>
-                <ModalTask listName={this.props.listName}/>
+                {/*<ModalTask listName={this.props.listName}/>*/}
                 <footer><a onClick={() => this.setState({addCard: true})} className="add-card">Add a card...</a>
                 </footer>
             </div>
@@ -46,7 +47,7 @@ class List extends Component {
                     {this.props.listName}
                     <a className="close" onClick={this.props.close}>&times;</a>
                 </header>
-                <ModalTask listName={this.props.listName}/>
+                {/*<ModalTask listName={this.props.listName}/>*/}
                 <ul>
                     <li className="text-area"><textarea
                         name="list"
@@ -72,4 +73,21 @@ class List extends Component {
     }
 }
 
-export default List;
+export default connect(
+    // state => ({
+    //     task: state.lists[this.props.index].task
+    // }),
+    // dispatch => ({
+    //     onAddList: (name) => {
+    //         const payload = {
+    //             id: Date.now().toString(),
+    //             name,
+    //             tasks: []
+    //         };
+    //         dispatch({ type: 'ADD_LIST', payload });
+    //     },
+    //     onDelList: (index) => {
+    //         dispatch({ type: 'DELETE_LIST', payload: index })
+    //     }
+    // })
+)(List);
