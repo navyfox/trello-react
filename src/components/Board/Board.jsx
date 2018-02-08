@@ -1,84 +1,58 @@
 import React, {Component} from 'react';
 import './Board.css';
-import List from "../List/List";
+import Sticker from "../Sticker/Sticker";
 import {connect} from 'react-redux';
+import Immutable from 'immutable';
 
 
 class Board extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            addList: false,
-            flag: true,
-            value: '',
+            isAddSticker: false
         };
-        this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    handleChange(event) {
-        this.setState({value: event.target.value});
-    }
+
     handleSubmit(event) {
         if (event.key === 'Enter') {
-            this.props.onAddList(event.target.value);
-            this.setState({value: ""});
-            this.setState({addList: false});
+            this.props.onAddSticker(event.target.value);
+            this.setState({isAddSticker: false});
         }
     }
-    deleteList (index) {
-        this.props.onDelList(index);
-        this.setState({flag: !this.state.flag});
-    }
-    rendDefault () {
+
+    render() {
+        let newStickerContent = this.state.isAddSticker
+            ? <textarea onKeyPress={this.handleSubmit}/>
+            : <a onClick={() => this.setState({isAddSticker: true})}>Add new sticker</a>;
         return (
             <div className="lists">
-                {this.props.lists.map((item, index) => <List key={index} listName={item.name} close={() => this.deleteList(index)}/>)}
-                <div className="list">
-                    <div className="add-list"><a onClick={() => this.setState({addList: true})}>Add new list</a></div>
-                </div>
-            </div>
-        )
-    }
-    rendAdd () {
-        return (
-            <div className="lists">
-                {this.props.lists.map((item, index) => <List key={index} listName={item.name} index={index} close={() => this.deleteList(index)}/>)}
+                {this.props.stickers.map(item => <Sticker key={item.id} title={item.name} index={item.id}
+                                                          handleDelete={() => this.props.onDelSticker(item.id)}/>)}
                 <div className="list">
                     <div className="add-list">
-                        <textarea
-                            value={this.state.value}
-                            onChange={this.handleChange}
-                            onKeyPress={this.handleSubmit}
-                        />
+                        {newStickerContent}
                     </div>
                 </div>
             </div>
         )
     }
-    render() {
-        if (this.state.addList) {
-            return (this.rendAdd())
-        } else {
-            return (this.rendDefault())
-        }
-    }
 }
 
-export default connect(
-    state => ({
-        lists: state.lists
-    }),
-    dispatch => ({
-        onAddList: (name) => {
-            const payload = {
-                id: Date.now().toString(),
-                name,
-                tasks: []
-            };
-            dispatch({ type: 'ADD_LIST', payload });
-        },
-        onDelList: (index) => {
-            dispatch({ type: 'DELETE_LIST', payload: index })
-        }
-    })
-)(Board);
+const mapStateToProps = (state) => ({stickers: state.stickers.toJS()});
+const mapDispatchToProps = (dispatch) => ({
+    onAddSticker: (name) => {
+        const payload = Immutable.fromJS({
+            id: Date.now().toString(),
+            name,
+            tasks: [],
+            count: 2
+        });
+        dispatch({type: 'ADD_STICKER', payload: payload});
+    },
+    onDelSticker: (id) => {
+        dispatch({type: 'DELETE_STICKER', payload: id})
+    }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Board);

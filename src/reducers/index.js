@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import lists from './lists';
+import stickers from './stickers';
 
 export default combineReducers({
-    lists
+    stickers
 });

@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import './TitleTask.css';
+import {connect} from "react-redux";
 
 class TitleTask extends Component {
     constructor(props) {
         super(props);
-        let returnObj = JSON.parse(localStorage.getItem("key"))[this.props.listName][this.props.modalIndexItem];
         this.state = {
             titleEdit: false,
-            storage: returnObj,
-            value: returnObj.title,
+            value: this.props.lists[this.props.listIndex].tasks[this.props.modalIndexItem].name,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,13 +22,8 @@ class TitleTask extends Component {
 
     handleSubmit(event) {
         if (event.key === 'Enter') {
-            let timeVar = this.state.storage;
-            timeVar.title = this.state.value;
-            this.setState({titleEdit: false, storage: timeVar});
-            let returnObj = JSON.parse(localStorage.getItem("key"));
-            returnObj[this.props.listName][this.props.modalIndexItem].title = this.state.value;
-            let newSerialObj = JSON.stringify(returnObj);
-            localStorage.setItem("key", newSerialObj);
+            this.props.onEditTask(this.state.value, this.props.listIndex, this.props.modalIndexItem);
+            this.setState({titleEdit: false});
         }
     }
 
@@ -63,4 +57,18 @@ class TitleTask extends Component {
     }
 }
 
-export default TitleTask;
+export default connect(
+    state => ({
+        lists: state.lists
+    }),
+    dispatch => ({
+        onEditTask: (name, id, idTask) => {
+            const payload = {
+                id: id,
+                idTask: idTask,
+                name
+            };
+            dispatch({ type: 'EDIT_TASK_NAME', payload});
+        }
+    })
+)(TitleTask);
