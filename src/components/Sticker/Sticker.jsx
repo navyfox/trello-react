@@ -58,6 +58,7 @@ class List extends Component {
 const mapStateToProps = (state) => ({stickers: state.stickers});
 const mapDispatchToProps = (dispatch) => ({
     onAddTask: (name, index) => {
+
         dispatch({type: 'ADD_TASK', id: index, name: name, index: Date.now()});
     }
 });

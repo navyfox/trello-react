@@ -3,6 +3,7 @@ import './Board.css';
 import Sticker from "../Sticker/Sticker";
 import {connect} from 'react-redux';
 import Immutable from 'immutable';
+import {List} from 'immutable';
 
 
 class Board extends Component {
@@ -45,7 +46,7 @@ const mapDispatchToProps = (dispatch) => ({
         const payload = Immutable.fromJS({
             id: Date.now(),
             name,
-            tasks: []
+            tasks: List([])
         });
         dispatch({type: 'ADD_STICKER', payload: payload});
     },

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import ReactModal from 'react-modal';
 import TitleTask from "../TitleTask/TitleTask";
-import Description from "../Description/Description";
-import Comment from "../Comment/Comment";
+// import Description from "../Description/Description";
+// import Comment from "../Comment/Comment";
 import {connect} from "react-redux";
 import {getStiker} from "../../selectors/selectors";
 
@@ -25,12 +25,8 @@ class ModalTask extends Component {
         this.setState({showModal: false, modalIndexItem: null});
     }
 
-    deleteTask() {
-        let returnObj = JSON.parse(localStorage.getItem("key"));
-        returnObj[this.props.listName].splice(this.state.modalIndexItem, 1);
-        localStorage.removeItem("key");
-        let newSerialObj = JSON.stringify(returnObj);
-        localStorage.setItem("key", newSerialObj);
+    handelDeleteTask() {
+        this.props.onDeleteTask(this.props.index, this.state.modalIndexItem);
         this.setState({showModal: false});
     }
 
@@ -52,7 +48,8 @@ class ModalTask extends Component {
                             {/*<Description listIndex={this.props.index} modalIndexItem={this.state.modalIndexItem}/>*/}
                         </div>
                         <div className="header-modal__right">
-                            <button className="del-task" onClick={() => this.deleteTask()}><span>DELETE</span></button>
+                            <button className="del-task" onClick={() => this.handelDeleteTask()}><span>DELETE</span>
+                            </button>
                         </div>
                     </div>
                     {/*<Comment listIndex={this.props.index} modalIndexItem={this.state.modalIndexItem}/>*/}
@@ -65,7 +62,7 @@ class ModalTask extends Component {
 const mapStateToProps = (state, ownProps) => ({tasks: getStiker(state.stickers, ownProps.index).toJS().tasks});
 const mapDispatchToProps = (dispatch) => ({
     onDeleteTask: (idStiker, idTask) => {
-        dispatch({ type: 'DELETE_LIST', id: idStiker, idTask: idTask })
+        dispatch({type: 'DELETE_TASK', id: idStiker, idTask: idTask})
     }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ModalTask);
