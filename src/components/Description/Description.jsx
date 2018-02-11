@@ -20,7 +20,7 @@ class Description extends Component {
 
     handleSubmit(event) {
         if (event.key === 'Enter') {
-            this.props.onDescription(this.props.stickerIndex, this.props.modalIndexItem, this.state.value);
+            this.props.onDescription(this.state.value);
             this.setState({isEdit: false});
         }
     }
@@ -43,9 +43,14 @@ class Description extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({description: getStiker(state.stickers, ownProps.stickerIndex).toJS().tasks.find(obj => obj.id === ownProps.modalIndexItem).description});
-const mapDispatchToProps = (dispatch) => ({
-    onDescription: (stickerIndex, idTask, description) => {
-        dispatch({type: 'EDIT_TASK_DESCRIPTION', id: stickerIndex, idTask: idTask, description: description})
+const mapDispatchToProps = (dispatch, ownProps) => ({
+    onDescription: (description) => {
+        dispatch({
+            type: 'EDIT_TASK_DESCRIPTION',
+            id: ownProps.stickerIndex,
+            idTask: ownProps.modalIndexItem,
+            description: description
+        })
     }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Description);

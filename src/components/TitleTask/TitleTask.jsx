@@ -23,7 +23,7 @@ class TitleTask extends Component {
 
     handleSubmit(event) {
         if (event.key === 'Enter') {
-            this.props.onEditTaskName(this.props.stickerIndex, this.props.modalIndexItem, this.state.value);
+            this.props.onEditTaskName(this.state.value);
             this.setState({titleEdit: false});
         }
     }
@@ -45,11 +45,18 @@ class TitleTask extends Component {
         )
     }
 }
+
 const mapStateToProps = (state, ownProps) => ({
-    title: getStiker(state.stickers, ownProps.stickerIndex).toJS().tasks.find(obj => obj.id === ownProps.modalIndexItem).name});
-const mapDispatchToProps = (dispatch) => ({
-    onEditTaskName: (id, idTask, name) => {
-        dispatch({ type: 'EDIT_TASK_NAME', id: id, idTask: idTask, name: name});
+    title: getStiker(state.stickers, ownProps.stickerIndex).toJS().tasks.find(obj => obj.id === ownProps.modalIndexItem).name
+});
+const mapDispatchToProps = (dispatch, ownProps) => ({
+    onEditTaskName: (name) => {
+        dispatch({
+            type: 'EDIT_TASK_NAME',
+            id: ownProps.stickerIndex,
+            idTask: ownProps.modalIndexItem,
+            name: name
+        });
     }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(TitleTask);

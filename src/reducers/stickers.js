@@ -1,5 +1,5 @@
 import Immutable from 'immutable';
-import { List } from 'immutable';
+import {List} from 'immutable';
 import {findIndexSticker, getStiker} from "../selectors/selectors";
 
 const initialState = List([]);
@@ -10,8 +10,7 @@ const EDIT_TASK_NAME = 'EDIT_TASK_NAME';
 const DELETE_TASK = 'DELETE_TASK';
 const EDIT_TASK_DESCRIPTION = 'EDIT_TASK_DESCRIPTION';
 const ADD_TASK_COMMENT = 'ADD_TASK_COMMENT';
-const DELETE_TASK_COMMENT ='DELETE_TASK_COMMENT';
-
+const DELETE_TASK_COMMENT = 'DELETE_TASK_COMMENT';
 
 export default function stickers(state = initialState, action) {
     switch (action.type) {

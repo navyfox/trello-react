@@ -11,7 +11,6 @@ class Comment extends Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.deleteComment = this.deleteComment.bind(this);
     }
 
     handleChange(event) {
@@ -21,10 +20,6 @@ class Comment extends Component {
     handleSubmit() {
         this.props.onAddComment(this.state.value);
         this.setState({value: ''});
-    }
-
-    deleteComment(index) {
-        this.props.onDeleteComment(this.props.stickerIndex, this.props.modalIndexItem, index);
     }
 
     render() {
@@ -38,7 +33,7 @@ class Comment extends Component {
                 />
                 <input value="Add" type="submit" onClick={this.handleSubmit}/>
                 {this.props.comments.map((item, index) => <ItemComments key={index} item={item}
-                                                        func={() => this.deleteComment(index)}/>)}
+                                                                        func={() => this.props.onDeleteComment(index)}/>)}
             </div>
         )
     }
@@ -47,10 +42,20 @@ class Comment extends Component {
 const mapStateToProps = (state, ownProps) => ({comments: getStiker(state.stickers, ownProps.stickerIndex).toJS().tasks.find(obj => obj.id === ownProps.modalIndexItem).comments});
 const mapDispatchToProps = (dispatch, ownProps) => ({
     onAddComment: (comment) => {
-        dispatch({type: 'ADD_TASK_COMMENT', id: ownProps.stickerIndex, idTask: ownProps.modalIndexItem, comment: comment})
+        dispatch({
+            type: 'ADD_TASK_COMMENT',
+            id: ownProps.stickerIndex,
+            idTask: ownProps.modalIndexItem,
+            comment: comment
+        })
     },
-    onDeleteComment: (stickerIndex, idTask, idComment) => {
-        dispatch({type: 'DELETE_TASK_COMMENT', id: stickerIndex, idTask: idTask, idComment: idComment})
+    onDeleteComment: (idComment) => {
+        dispatch({
+            type: 'DELETE_TASK_COMMENT',
+            id: ownProps.stickerIndex,
+            idTask: ownProps.modalIndexItem,
+            idComment: idComment
+        })
     }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Comment);

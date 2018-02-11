@@ -19,20 +19,20 @@ class List extends Component {
     }
 
     handleSubmit() {
-        this.props.onAddTask(this.state.value, this.props.index);
+        this.props.onAddTask(this.state.value);
         this.setState({isAddTask: false});
     }
 
     render() {
         let newTaskContent = this.state.isAddTask ? (
-                <ul>
-                    <li className="text-area"><textarea
-                        name="list"
-                        onChange={this.handleChange}
-                    />
-                    </li>
-                </ul>
-            ) : null;
+            <ul>
+                <li className="text-area"><textarea
+                    name="list"
+                    onChange={this.handleChange}
+                />
+                </li>
+            </ul>
+        ) : null;
         let footerAddTask = this.state.isAddTask ?
             (<footer>
                 <input className="left-input" value="Add" type="submit" onClick={this.handleSubmit}/>
@@ -56,10 +56,14 @@ class List extends Component {
 }
 
 const mapStateToProps = (state) => ({stickers: state.stickers});
-const mapDispatchToProps = (dispatch) => ({
-    onAddTask: (name, index) => {
-
-        dispatch({type: 'ADD_TASK', id: index, name: name, index: Date.now()});
+const mapDispatchToProps = (dispatch, ownProps) => ({
+    onAddTask: (name) => {
+        dispatch({
+            type: 'ADD_TASK',
+            id: ownProps.index,
+            name: name,
+            index: Date.now()
+        });
     }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(List);

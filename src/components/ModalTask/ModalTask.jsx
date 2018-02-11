@@ -26,14 +26,14 @@ class ModalTask extends Component {
     }
 
     handelDeleteTask() {
-        this.props.onDeleteTask(this.props.index, this.state.modalIndexItem);
+        this.props.onDeleteTask(this.state.modalIndexItem);
         this.setState({showModal: false});
     }
 
     render() {
         return (
             <ul>
-                {this.props.tasks.map((item, index) => <li key={item.id}><a
+                {this.props.tasks.map(item => <li key={item.id}><a
                     onClick={() => this.handleOpenModal(item.id)}>{item.name}</a></li>)}
                 <ReactModal
                     isOpen={this.state.showModal}
@@ -60,9 +60,13 @@ class ModalTask extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({tasks: getStiker(state.stickers, ownProps.index).toJS().tasks});
-const mapDispatchToProps = (dispatch) => ({
-    onDeleteTask: (idStiker, idTask) => {
-        dispatch({type: 'DELETE_TASK', id: idStiker, idTask: idTask})
+const mapDispatchToProps = (dispatch, ownProps) => ({
+    onDeleteTask: (idTask) => {
+        dispatch({
+            type: 'DELETE_TASK',
+            id: ownProps.index,
+            idTask: idTask
+        })
     }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ModalTask);
