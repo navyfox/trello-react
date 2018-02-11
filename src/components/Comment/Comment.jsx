@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import ItemComments from "./ItemComments";
+import {getStiker} from "../../selectors/selectors";
+import {connect} from "react-redux";
 
 class Comment extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: "",
-            delete: true,
+            value: ''
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,32 +19,15 @@ class Comment extends Component {
     }
 
     handleSubmit() {
-        let returnObj = JSON.parse(localStorage.getItem("key"));
-        if (returnObj[this.props.listName][this.props.modalIndexItem].comments === undefined) {
-            returnObj[this.props.listName][this.props.modalIndexItem].comments = [];
-            returnObj[this.props.listName][this.props.modalIndexItem].comments.push(this.state.value);
-        } else {
-            returnObj[this.props.listName][this.props.modalIndexItem].comments.unshift(this.state.value);
-        }
-        let newSerialObj = JSON.stringify(returnObj);
-        localStorage.setItem("key", newSerialObj);
-        this.setState({value: ""});
+        this.props.onAddComment(this.state.value);
+        this.setState({value: ''});
     }
 
     deleteComment(index) {
-        let returnObj = JSON.parse(localStorage.getItem("key"));
-        returnObj[this.props.listName][this.props.modalIndexItem].comments.splice(index, 1);
-        let newSerialObj = JSON.stringify(returnObj);
-        console.log(newSerialObj);
-        localStorage.setItem("key", newSerialObj);
-        this.setState({delete: !this.state.delete});
+        this.props.onDeleteComment(this.props.stickerIndex, this.props.modalIndexItem, index);
     }
 
     render() {
-        let arr = JSON.parse(localStorage.getItem("key"))[this.props.listName][this.props.modalIndexItem].comments;
-        if (arr === undefined) {
-            arr = [];
-        }
         return (
             <div className="add-comment">
                 <h2>Add comment</h2>
@@ -53,11 +37,20 @@ class Comment extends Component {
                     value={this.state.value}
                 />
                 <input value="Add" type="submit" onClick={this.handleSubmit}/>
-                {arr.map((item, index) => <ItemComments key={index} item={item}
+                {this.props.comments.map((item, index) => <ItemComments key={index} item={item}
                                                         func={() => this.deleteComment(index)}/>)}
             </div>
-        );
+        )
     }
 }
 
-export default Comment;
+const mapStateToProps = (state, ownProps) => ({comments: getStiker(state.stickers, ownProps.stickerIndex).toJS().tasks.find(obj => obj.id === ownProps.modalIndexItem).comments});
+const mapDispatchToProps = (dispatch, ownProps) => ({
+    onAddComment: (comment) => {
+        dispatch({type: 'ADD_TASK_COMMENT', id: ownProps.stickerIndex, idTask: ownProps.modalIndexItem, comment: comment})
+    },
+    onDeleteComment: (stickerIndex, idTask, idComment) => {
+        dispatch({type: 'DELETE_TASK_COMMENT', id: stickerIndex, idTask: idTask, idComment: idComment})
+    }
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Comment);

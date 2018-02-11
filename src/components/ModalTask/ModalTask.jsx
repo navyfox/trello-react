@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import ReactModal from 'react-modal';
 import TitleTask from "../TitleTask/TitleTask";
-// import Description from "../Description/Description";
-// import Comment from "../Comment/Comment";
+import Description from "../Description/Description";
+import Comment from "../Comment/Comment";
 import {connect} from "react-redux";
 import {getStiker} from "../../selectors/selectors";
 
@@ -33,7 +33,7 @@ class ModalTask extends Component {
     render() {
         return (
             <ul>
-                {this.props.tasks.map((item, index) => <li key={index}><a
+                {this.props.tasks.map((item, index) => <li key={item.id}><a
                     onClick={() => this.handleOpenModal(item.id)}>{item.name}</a></li>)}
                 <ReactModal
                     isOpen={this.state.showModal}
@@ -45,14 +45,14 @@ class ModalTask extends Component {
                     <div className="header-modal">
                         <div className="header-modal__left">
                             <TitleTask stickerIndex={this.props.index} modalIndexItem={this.state.modalIndexItem}/>
-                            {/*<Description listIndex={this.props.index} modalIndexItem={this.state.modalIndexItem}/>*/}
+                            <Description stickerIndex={this.props.index} modalIndexItem={this.state.modalIndexItem}/>
                         </div>
                         <div className="header-modal__right">
                             <button className="del-task" onClick={() => this.handelDeleteTask()}><span>DELETE</span>
                             </button>
                         </div>
                     </div>
-                    {/*<Comment listIndex={this.props.index} modalIndexItem={this.state.modalIndexItem}/>*/}
+                    <Comment stickerIndex={this.props.index} modalIndexItem={this.state.modalIndexItem}/>
                 </ReactModal>
             </ul>
         );
