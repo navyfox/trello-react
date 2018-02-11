@@ -4,6 +4,7 @@ import TitleTask from "../TitleTask/TitleTask";
 import Description from "../Description/Description";
 import Comment from "../Comment/Comment";
 import {connect} from "react-redux";
+import {getStiker} from "../../selectors/selectors";
 
 class ModalTask extends Component {
     constructor(props) {
@@ -34,12 +35,10 @@ class ModalTask extends Component {
     }
 
     render() {
-        // this.state.lsetState(st);
-        const arr = this.props.lists[this.props.index].tasks;
         return (
             <ul>
-                {arr.map((item, index) => <li key={index}><a
-                    onClick={() => this.handleOpenModal(index)}>{item.name}</a></li>)}
+                {this.props.tasks.map((item, index) => <li key={index}><a
+                    onClick={() => this.handleOpenModal(item.id)}>{item.name}</a></li>)}
                 <ReactModal
                     isOpen={this.state.showModal}
                     contentLabel=""
@@ -49,7 +48,7 @@ class ModalTask extends Component {
                 >
                     <div className="header-modal">
                         <div className="header-modal__left">
-                            <TitleTask listIndex={this.props.index} modalIndexItem={this.state.modalIndexItem}/>
+                            <TitleTask stickerIndex={this.props.index} modalIndexItem={this.state.modalIndexItem}/>
                             {/*<Description listIndex={this.props.index} modalIndexItem={this.state.modalIndexItem}/>*/}
                         </div>
                         <div className="header-modal__right">
@@ -63,21 +62,10 @@ class ModalTask extends Component {
     }
 }
 
-export default connect(
-    state => ({
-        lists: state.lists
-    }),
-    dispatch => ({
-        onAddList: (name) => {
-            const payload = {
-                id: Date.now().toString(),
-                name,
-                tasks: []
-            };
-            dispatch({ type: 'ADD_LIST', payload });
-        },
-        onDelList: (index) => {
-            dispatch({ type: 'DELETE_LIST', payload: index })
-        }
-    })
-)(ModalTask);
+const mapStateToProps = (state, ownProps) => ({tasks: getStiker(state.stickers, ownProps.index).toJS().tasks});
+const mapDispatchToProps = (dispatch) => ({
+    onDeleteTask: (idStiker, idTask) => {
+        dispatch({ type: 'DELETE_LIST', id: idStiker, idTask: idTask })
+    }
+});
+export default connect(mapStateToProps, mapDispatchToProps)(ModalTask);

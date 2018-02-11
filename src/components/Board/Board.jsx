@@ -43,15 +43,14 @@ const mapStateToProps = (state) => ({stickers: state.stickers.toJS()});
 const mapDispatchToProps = (dispatch) => ({
     onAddSticker: (name) => {
         const payload = Immutable.fromJS({
-            id: Date.now().toString(),
+            id: Date.now(),
             name,
-            tasks: [],
-            count: 2
+            tasks: []
         });
         dispatch({type: 'ADD_STICKER', payload: payload});
     },
     onDelSticker: (id) => {
-        dispatch({type: 'DELETE_STICKER', payload: id})
+        dispatch({type: 'DELETE_STICKER', id: id})
     }
 });
 

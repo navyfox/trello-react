@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import './TitleTask.css';
 import {connect} from "react-redux";
+import {getStiker} from "../../selectors/selectors";
 
 class TitleTask extends Component {
     constructor(props) {
         super(props);
         this.state = {
             titleEdit: false,
-            value: this.props.lists[this.props.listIndex].tasks[this.props.modalIndexItem].name,
+            value: this.props.title,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,21 +23,13 @@ class TitleTask extends Component {
 
     handleSubmit(event) {
         if (event.key === 'Enter') {
-            this.props.onEditTask(this.state.value, this.props.listIndex, this.props.modalIndexItem);
+            this.props.onEditTaskName(this.props.stickerIndex, this.props.modalIndexItem, this.state.value);
             this.setState({titleEdit: false});
         }
     }
 
-    renderDefault() {
-        return (
-            <div>
-                <div className="title" onClick={() => this.setState({titleEdit: true})}>{this.state.value}</div>
-            </div>
-        );
-    }
-
-    renderEdit() {
-        return (
+    render() {
+        return this.state.titleEdit ? (
             <div>
                 <textarea
                     name="description"
@@ -45,30 +38,18 @@ class TitleTask extends Component {
                     onKeyPress={this.handleSubmit}
                 />
             </div>
-        );
-    }
-
-    render() {
-        if (this.state.titleEdit) {
-            return (this.renderEdit())
-        } else {
-            return (this.renderDefault())
-        }
+        ) : (
+            <div>
+                <div className="title" onClick={() => this.setState({titleEdit: true})}>{this.state.value}</div>
+            </div>
+        )
     }
 }
-
-export default connect(
-    state => ({
-        lists: state.lists
-    }),
-    dispatch => ({
-        onEditTask: (name, id, idTask) => {
-            const payload = {
-                id: id,
-                idTask: idTask,
-                name
-            };
-            dispatch({ type: 'EDIT_TASK_NAME', payload});
-        }
-    })
-)(TitleTask);
+const mapStateToProps = (state, ownProps) => ({
+    title: getStiker(state.stickers, ownProps.stickerIndex).toJS().tasks.find(obj => obj.id === ownProps.modalIndexItem).name});
+const mapDispatchToProps = (dispatch) => ({
+    onEditTaskName: (id, idTask, name) => {
+        dispatch({ type: 'EDIT_TASK_NAME', id: id, idTask: idTask, name: name});
+    }
+});
+export default connect(mapStateToProps, mapDispatchToProps)(TitleTask);
