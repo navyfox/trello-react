@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 import {List} from 'immutable';
-import {findIndexSticker, getStiker, getTaskstoJS} from "../selectors/selectors";
+import {findIndexSticker, getTaskstoJS, updateTasks} from "../selectors/selectors";
 
 const initialState = List([]);
 const ADD_STICKER = 'ADD_STICKER';
@@ -31,23 +31,23 @@ export default function stickers(state = initialState, action) {
         case EDIT_TASK_NAME:
             tasks = getTaskstoJS(state, action.id);
             tasks.find(obj => obj.id === action.idTask).name = action.name;
-            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', Immutable.fromJS(tasks)));
+            return updateTasks(state, action.id, tasks);
         case DELETE_TASK:
             tasks = getTaskstoJS(state, action.id);
             tasks.splice(tasks.indexOf(tasks.find(obj => obj.id === action.idTask)), 1);
-            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', Immutable.fromJS(tasks)));
+            return updateTasks(state, action.id, tasks);
         case EDIT_TASK_DESCRIPTION:
             tasks = getTaskstoJS(state, action.id);
             tasks.find(obj => obj.id === action.idTask).description = action.description;
-            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', Immutable.fromJS(tasks)));
+            return updateTasks(state, action.id, tasks);
         case ADD_TASK_COMMENT:
             tasks = getTaskstoJS(state, action.id);
             tasks.find(obj => obj.id === action.idTask).comments.unshift(action.comment);
-            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', Immutable.fromJS(tasks)));
+            return updateTasks(state, action.id, tasks);
         case DELETE_TASK_COMMENT:
             tasks = getTaskstoJS(state, action.id);
             tasks.find(obj => obj.id === action.idTask).comments.splice(action.idComment, 1);
-            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', Immutable.fromJS(tasks)));
+            return updateTasks(state, action.id, tasks);
         default:
             return state;
     }
