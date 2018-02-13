@@ -1,6 +1,5 @@
 import Immutable from 'immutable';
 import {List} from 'immutable';
-import {findIndexSticker, getTaskstoJS, updateTasks} from "../selectors/selectors";
 
 const initialState = List([]);
 const ADD_STICKER = 'ADD_STICKER';
@@ -12,43 +11,58 @@ const EDIT_TASK_DESCRIPTION = 'EDIT_TASK_DESCRIPTION';
 const ADD_TASK_COMMENT = 'ADD_TASK_COMMENT';
 const DELETE_TASK_COMMENT = 'DELETE_TASK_COMMENT';
 
-export default function stickers(state = initialState, action) {
-    let tasks;
-    switch (action.type) {
-        case ADD_STICKER :
-            return state.push(action.payload);
-        case DELETE_STICKER :
-            return state.delete(findIndexSticker(state, action.id));
-        case ADD_TASK:
-            tasks = getTaskstoJS(state, action.id);
-            tasks.push({
+
+const ACTION_HANDLERS = {
+    [ADD_STICKER]: (state, action) => state.push(action.payload),
+    [DELETE_STICKER]: (state, action) => state.delete(state.findIndex((obj) => obj.get('id') === action.id)),
+    [ADD_TASK]: (state, action) => {
+        const stikerIndex = state.findIndex(sticker => sticker.get('id') === action.id);
+        return state.update(stikerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
+            return tasks.push(Immutable.fromJS({
                 id: action.index,
                 name: action.name,
                 description: '',
                 comments: []
-            });
-            return updateTasks(state, action.id, tasks);
-        case EDIT_TASK_NAME:
-            tasks = getTaskstoJS(state, action.id);
-            tasks.find(obj => obj.id === action.idTask).name = action.name;
-            return updateTasks(state, action.id, tasks);
-        case DELETE_TASK:
-            tasks = getTaskstoJS(state, action.id);
-            tasks.splice(tasks.indexOf(tasks.find(obj => obj.id === action.idTask)), 1);
-            return updateTasks(state, action.id, tasks);
-        case EDIT_TASK_DESCRIPTION:
-            tasks = getTaskstoJS(state, action.id);
-            tasks.find(obj => obj.id === action.idTask).description = action.description;
-            return updateTasks(state, action.id, tasks);
-        case ADD_TASK_COMMENT:
-            tasks = getTaskstoJS(state, action.id);
-            tasks.find(obj => obj.id === action.idTask).comments.unshift(action.comment);
-            return updateTasks(state, action.id, tasks);
-        case DELETE_TASK_COMMENT:
-            tasks = getTaskstoJS(state, action.id);
-            tasks.find(obj => obj.id === action.idTask).comments.splice(action.idComment, 1);
-            return updateTasks(state, action.id, tasks);
-        default:
-            return state;
+            }))
+        }));
+    },
+    [EDIT_TASK_NAME]: (state, action) => {
+        const stikerIndex = state.findIndex(sticker => sticker.get('id') === action.id);
+        return state.update(stikerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
+            const taskIndex = tasks.findIndex(task => task.get('id') === action.idTask);
+            console.log(taskIndex);
+            return tasks.update(taskIndex, task => task.set('name', action.name));
+        }));
+    },
+    [EDIT_TASK_DESCRIPTION]: (state, action) => {
+        const stikerIndex = state.findIndex(sticker => sticker.get('id') === action.id);
+        return state.update(stikerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
+            const taskIndex = tasks.findIndex(task => task.get('id') === action.idTask);
+            return tasks.update(taskIndex, task => task.set('description', action.description));
+        }));
+    },
+    [ADD_TASK_COMMENT]: (state, action) => {
+        const stikerIndex = state.findIndex(sticker => sticker.get('id') === action.id);
+        return state.update(stikerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
+            const taskIndex = tasks.findIndex(task => task.get('id') === action.idTask);
+            return tasks.update(taskIndex, task => task.updateIn(['comments'], comments => {
+                return comments.insert(0, action.comment);
+            }));
+        }));
+    },
+    [DELETE_TASK_COMMENT]: (state, action) => {
+        const stikerIndex = state.findIndex(sticker => sticker.get('id') === action.id);
+        return state.update(stikerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
+            const taskIndex = tasks.findIndex(task => task.get('id') === action.idTask);
+            return tasks.update(taskIndex, task => task.updateIn(['comments'], comments => {
+                return comments.delete(action.idComment);
+            }));
+        }));
     }
+};
+
+export default function stickers(state = initialState, action) {
+    const handler = ACTION_HANDLERS[action.type];
+
+    return handler ? handler(state, action) : state;
 }
