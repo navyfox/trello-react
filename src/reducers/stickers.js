@@ -27,7 +27,7 @@ export default function stickers(state = initialState, action) {
                 description: '',
                 comments: []
             });
-            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', Immutable.fromJS(tasks)));
+            return updateTasks(state, action.id, tasks);
         case EDIT_TASK_NAME:
             tasks = getTaskstoJS(state, action.id);
             tasks.find(obj => obj.id === action.idTask).name = action.name;
