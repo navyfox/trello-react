@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 import {List} from 'immutable';
-import {findIndexSticker, getStiker} from "../selectors/selectors";
+import {findIndexSticker, getStiker, getTaskstoJS} from "../selectors/selectors";
 
 const initialState = List([]);
 const ADD_STICKER = 'ADD_STICKER';
@@ -13,6 +13,7 @@ const ADD_TASK_COMMENT = 'ADD_TASK_COMMENT';
 const DELETE_TASK_COMMENT = 'DELETE_TASK_COMMENT';
 
 export default function stickers(state = initialState, action) {
+    let tasks;
     switch (action.type) {
         case ADD_STICKER :
             return state.push(action.payload);
@@ -29,30 +30,25 @@ export default function stickers(state = initialState, action) {
             const newArrAddTasks = Immutable.fromJS(arrAddTasks);
             return state.update(findIndexSticker(state, action.id), item => item.set('tasks', newArrAddTasks));
         case EDIT_TASK_NAME:
-            let arrTasksName = getStiker(state, action.id).toJS().tasks;
-            arrTasksName.find(obj => obj.id === action.idTask).name = action.name;
-            const newArrTasksName = Immutable.fromJS(arrTasksName);
-            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', newArrTasksName));
+            tasks = getTaskstoJS(state, action.id);
+            tasks.find(obj => obj.id === action.idTask).name = action.name;
+            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', Immutable.fromJS(tasks)));
         case DELETE_TASK:
-            let arrDeleteTask = getStiker(state, action.id).toJS().tasks;
-            arrDeleteTask.splice(arrDeleteTask.indexOf(arrDeleteTask.find(obj => obj.id === action.idTask)), 1);
-            const newArrDeleteTask = Immutable.fromJS(arrDeleteTask);
-            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', newArrDeleteTask));
+            tasks = getTaskstoJS(state, action.id);
+            tasks.splice(tasks.indexOf(tasks.find(obj => obj.id === action.idTask)), 1);
+            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', Immutable.fromJS(tasks)));
         case EDIT_TASK_DESCRIPTION:
-            let arrTasksDescription = getStiker(state, action.id).toJS().tasks;
-            arrTasksDescription.find(obj => obj.id === action.idTask).description = action.description;
-            const newArrTasksDescription = Immutable.fromJS(arrTasksDescription);
-            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', newArrTasksDescription));
+            tasks = getTaskstoJS(state, action.id);
+            tasks.find(obj => obj.id === action.idTask).description = action.description;
+            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', Immutable.fromJS(tasks)));
         case ADD_TASK_COMMENT:
-            let arrTasksComment = getStiker(state, action.id).toJS().tasks;
-            arrTasksComment.find(obj => obj.id === action.idTask).comments.unshift(action.comment);
-            const newArrTasksComment = Immutable.fromJS(arrTasksComment);
-            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', newArrTasksComment));
+            tasks = getTaskstoJS(state, action.id);
+            tasks.find(obj => obj.id === action.idTask).comments.unshift(action.comment);
+            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', Immutable.fromJS(tasks)));
         case DELETE_TASK_COMMENT:
-            let arrComments = getStiker(state, action.id).toJS().tasks;
-            arrComments.find(obj => obj.id === action.idTask).comments.splice(action.idComment, 1);
-            const newArrComments = Immutable.fromJS(arrComments);
-            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', newArrComments));
+            tasks = getTaskstoJS(state, action.id);
+            tasks.find(obj => obj.id === action.idTask).comments.splice(action.idComment, 1);
+            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', Immutable.fromJS(tasks)));
         default:
             return state;
     }
