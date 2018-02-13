@@ -20,15 +20,14 @@ export default function stickers(state = initialState, action) {
         case DELETE_STICKER :
             return state.delete(findIndexSticker(state, action.id));
         case ADD_TASK:
-            let arrAddTasks = getStiker(state, action.id).toJS().tasks;
-            arrAddTasks.push({
+            tasks = getTaskstoJS(state, action.id);
+            tasks.push({
                 id: action.index,
                 name: action.name,
                 description: '',
                 comments: []
             });
-            const newArrAddTasks = Immutable.fromJS(arrAddTasks);
-            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', newArrAddTasks));
+            return state.update(findIndexSticker(state, action.id), item => item.set('tasks', Immutable.fromJS(tasks)));
         case EDIT_TASK_NAME:
             tasks = getTaskstoJS(state, action.id);
             tasks.find(obj => obj.id === action.idTask).name = action.name;
