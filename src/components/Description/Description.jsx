@@ -1,6 +1,10 @@
-import React, {Component} from 'react';
-import {getStiker} from "../../selectors/selectors";
-import {connect} from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+
+import { editTaskDescription } from "../../reducers/stickers";
+import { getStiker } from "../../selectors/selectors";
 
 class Description extends Component {
     constructor(props) {
@@ -20,7 +24,7 @@ class Description extends Component {
 
     handleSubmit(event) {
         if (event.key === 'Enter') {
-            this.props.onDescription(this.state.value);
+            this.props.editTaskDescription(this.props.index, this.props.idTask, this.state.value);
             this.setState({isEdit: false});
         }
     }
@@ -42,15 +46,13 @@ class Description extends Component {
     }
 }
 
+Description.propTypes = {
+    stickerIndex: PropTypes.number.isRequired,
+    modalIndexItem: PropTypes.number.isRequired
+};
+
 const mapStateToProps = (state, ownProps) => ({description: getStiker(state.stickers, ownProps.stickerIndex).toJS().tasks.find(obj => obj.id === ownProps.modalIndexItem).description});
-const mapDispatchToProps = (dispatch, ownProps) => ({
-    onDescription: (description) => {
-        dispatch({
-            type: 'EDIT_TASK_DESCRIPTION',
-            id: ownProps.stickerIndex,
-            idTask: ownProps.modalIndexItem,
-            description: description
-        })
-    }
-});
+const mapDispatchToProps = (dispatch) => (bindActionCreators({
+    editTaskDescription
+}, dispatch));
 export default connect(mapStateToProps, mapDispatchToProps)(Description);

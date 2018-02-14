@@ -1,9 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import './Board.css';
+
 import Sticker from "../Sticker/Sticker";
-import {connect} from 'react-redux';
-import Immutable from 'immutable';
-import {List} from 'immutable';
+import { addSticker, delSticker } from "../../reducers/stickers";
+import { bindActionCreators } from 'redux';
 
 
 class Board extends Component {
@@ -17,7 +19,7 @@ class Board extends Component {
 
     handleSubmit(event) {
         if (event.key === 'Enter') {
-            this.props.onAddSticker(event.target.value);
+            this.props.addSticker(event.target.value);
             this.setState({isAddSticker: false});
         }
     }
@@ -28,8 +30,12 @@ class Board extends Component {
             : <a onClick={() => this.setState({isAddSticker: true})}>Add new sticker</a>;
         return (
             <div className="lists">
-                {this.props.stickers.map(item => <Sticker key={item.id} title={item.name} index={item.id}
-                                                          handleDelete={() => this.props.onDelSticker(item.id)}/>)}
+                {this.props.stickers.map(item => <Sticker key={item.id}
+                                                          title={item.name}
+                                                          index={item.id}
+                                                          handleDelete={() => this.props.delSticker(item.id)}
+                                                />)
+                }
                 <div className="list">
                     <div className="add-list">
                         {newStickerContent}
@@ -41,18 +47,9 @@ class Board extends Component {
 }
 
 const mapStateToProps = (state) => ({stickers: state.stickers.toJS()});
-const mapDispatchToProps = (dispatch) => ({
-    onAddSticker: (name) => {
-        const payload = Immutable.fromJS({
-            id: Date.now(),
-            name,
-            tasks: List([])
-        });
-        dispatch({type: 'ADD_STICKER', payload: payload});
-    },
-    onDelSticker: (id) => {
-        dispatch({type: 'DELETE_STICKER', id: id})
-    }
-});
+const mapDispatchToProps = (dispatch) => (bindActionCreators({
+    addSticker,
+    delSticker
+}, dispatch));
 
 export default connect(mapStateToProps, mapDispatchToProps)(Board);

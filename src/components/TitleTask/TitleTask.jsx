@@ -1,7 +1,12 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import PropTypes from "prop-types";
+
 import './TitleTask.css';
-import {connect} from "react-redux";
-import {getStiker} from "../../selectors/selectors";
+
+import { getStiker } from "../../selectors/selectors";
+import { editTaskName } from "../../reducers/stickers";
 
 class TitleTask extends Component {
     constructor(props) {
@@ -23,7 +28,7 @@ class TitleTask extends Component {
 
     handleSubmit(event) {
         if (event.key === 'Enter') {
-            this.props.onEditTaskName(this.state.value);
+            this.props.editTaskName(this.props.stickerIndex, this.props.modalIndexItem, this.state.value);
             this.setState({titleEdit: false});
         }
     }
@@ -46,17 +51,15 @@ class TitleTask extends Component {
     }
 }
 
+TitleTask.propTypes = {
+    stickerIndex: PropTypes.number.isRequired,
+    modalIndexItem: PropTypes.number.isRequired
+};
+
 const mapStateToProps = (state, ownProps) => ({
     title: getStiker(state.stickers, ownProps.stickerIndex).toJS().tasks.find(obj => obj.id === ownProps.modalIndexItem).name
 });
-const mapDispatchToProps = (dispatch, ownProps) => ({
-    onEditTaskName: (name) => {
-        dispatch({
-            type: 'EDIT_TASK_NAME',
-            id: ownProps.stickerIndex,
-            idTask: ownProps.modalIndexItem,
-            name: name
-        });
-    }
-});
+const mapDispatchToProps = (dispatch) => (bindActionCreators({
+    editTaskName
+}, dispatch));
 export default connect(mapStateToProps, mapDispatchToProps)(TitleTask);

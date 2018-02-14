@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class ItemComments extends Component {
     render() {
@@ -10,5 +11,10 @@ class ItemComments extends Component {
         );
     }
 }
+
+ItemComments.propTypes = {
+    item: PropTypes.string.isRequired,
+    func: PropTypes.func.isRequired
+};
 
 export default ItemComments;

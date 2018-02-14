@@ -1,9 +1,14 @@
-import React, {Component} from 'react';
-import './Sticker.css';
-import ModalTask from "../ModalTask/ModalTask";
-import {connect} from "react-redux";
+import React, { Component } from 'react';
+import { connect } from "react-redux";
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
 
-class List extends Component {
+import './Sticker.css';
+
+import ModalTask from "../ModalTask/ModalTask";
+import { addTask } from '../../reducers/stickers';
+
+class Sticker extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -19,7 +24,7 @@ class List extends Component {
     }
 
     handleSubmit() {
-        this.props.onAddTask(this.state.value);
+        this.props.addTask(this.state.value, this.props.index);
         this.setState({isAddTask: false});
     }
 
@@ -55,15 +60,13 @@ class List extends Component {
     }
 }
 
+Sticker.propTypes = {
+    index: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired
+};
+
 const mapStateToProps = (state) => ({stickers: state.stickers});
-const mapDispatchToProps = (dispatch, ownProps) => ({
-    onAddTask: (name) => {
-        dispatch({
-            type: 'ADD_TASK',
-            id: ownProps.index,
-            name: name,
-            index: Date.now()
-        });
-    }
-});
-export default connect(mapStateToProps, mapDispatchToProps)(List);
+const mapDispatchToProps = (dispatch) => (bindActionCreators({
+    addTask,
+}, dispatch));
+export default connect(mapStateToProps, mapDispatchToProps)(Sticker);

@@ -1,10 +1,14 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ReactModal from 'react-modal';
+import { bindActionCreators } from 'redux';
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+
 import TitleTask from "../TitleTask/TitleTask";
 import Description from "../Description/Description";
 import Comment from "../Comment/Comment";
-import {connect} from "react-redux";
-import {getStiker} from "../../selectors/selectors";
+import { getStiker } from "../../selectors/selectors";
+import { delTask } from "../../reducers/stickers";
 
 class ModalTask extends Component {
     constructor(props) {
@@ -26,7 +30,7 @@ class ModalTask extends Component {
     }
 
     handelDeleteTask() {
-        this.props.onDeleteTask(this.state.modalIndexItem);
+        this.props.delTask(this.props.index, this.state.modalIndexItem);
         this.setState({showModal: false});
     }
 
@@ -59,14 +63,12 @@ class ModalTask extends Component {
     }
 }
 
+ModalTask.propTypes = {
+    index: PropTypes.number.isRequired
+};
+
 const mapStateToProps = (state, ownProps) => ({tasks: getStiker(state.stickers, ownProps.index).toJS().tasks});
-const mapDispatchToProps = (dispatch, ownProps) => ({
-    onDeleteTask: (idTask) => {
-        dispatch({
-            type: 'DELETE_TASK',
-            id: ownProps.index,
-            idTask: idTask
-        })
-    }
-});
+const mapDispatchToProps = (dispatch) => (bindActionCreators({
+    delTask
+}, dispatch));
 export default connect(mapStateToProps, mapDispatchToProps)(ModalTask);
