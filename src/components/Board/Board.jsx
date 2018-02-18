@@ -12,21 +12,32 @@ class Board extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isAddSticker: false
+            isAddSticker: false,
+            text: '',
         };
+        this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(event) {
+        if (event.target.value.length <= 33) {
+            this.setState({text: event.target.value});
+        }
     }
 
     handleSubmit(event) {
         if (event.key === 'Enter') {
-            this.props.addSticker(event.target.value);
+            this.props.addSticker(this.state.text);
             this.setState({isAddSticker: false});
         }
     }
 
     render() {
         let newStickerContent = this.state.isAddSticker
-            ? <textarea onKeyPress={this.handleSubmit}/>
+            ? <textarea value={this.state.text}
+                        onKeyPress={this.handleSubmit}
+                        onChange={this.handleChange}
+            />
             : <a onClick={() => this.setState({isAddSticker: true})}>Add new sticker</a>;
         return (
             <div className="lists">

@@ -1,6 +1,27 @@
 import {List, fromJS} from 'immutable';
 
-const initialState = List([]);
+const initialState = fromJS([
+    {
+        id: 0,
+        name: 'TODO',
+        tasks: []
+    },
+    {
+        id: 1,
+        name: 'In Progress',
+        tasks: []
+    },
+    {
+        id: 2,
+        name: 'Testing',
+        tasks: []
+    },
+    {
+        id: 3,
+        name: 'Done',
+        tasks: []
+    }
+]);
 const ADD_STICKER = 'ADD_STICKER';
 const DELETE_STICKER = 'DELETE_STICKER';
 const ADD_TASK = 'ADD_TASK';
