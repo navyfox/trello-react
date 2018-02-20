@@ -1,6 +1,6 @@
-import { fromJS } from "immutable";
-
-export const findIndexSticker = (state, id) => state.findIndex((obj) => obj.get('id') === id);
-export const getStiker = (state, id) => state.get('stickers').get(state.get('stickers').findIndex((obj) => obj.get('id') === id));
-export const getTaskstoJS = (state, id) => getStiker(state, id).toJS().tasks;
-export const updateTasks = (state, id, tasks) => state.update(findIndexSticker(state, id), item => item.set('tasks', fromJS(tasks)));
+export const getStiker = (state, id) => {
+    return state.get('board').get('stickers').get(state.get('board').get('stickers').findIndex((obj) => obj.get('id') === id))
+};
+export const getTask = (state, id, idTask) => {
+    return getStiker(state, id).get('tasks').get(getStiker(state, id).get('tasks').findIndex(obj => obj.get('id') === idTask));
+};

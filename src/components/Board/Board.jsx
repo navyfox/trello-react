@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import './Board.css';
 
 import Sticker from "../Sticker/Sticker";
-import { addSticker, delSticker } from "../../reducers/stickers";
+import { addSticker, delSticker } from "../../reducers/board";
 import { bindActionCreators } from 'redux';
 
 
@@ -32,6 +32,13 @@ class Board extends Component {
         }
     }
 
+    stickersArray = () => this.props.stickers.map( (item) => (
+        <Sticker key={item.id}
+                 title={item.name}
+                 index={item.id}
+                 handleDelete={() => this.props.delSticker(item.id)}
+        />));
+
     render() {
         let newStickerContent = this.state.isAddSticker
             ? <textarea value={this.state.text}
@@ -41,12 +48,7 @@ class Board extends Component {
             : <a onClick={() => this.setState({isAddSticker: true})}>Add new sticker</a>;
         return (
             <div className="lists">
-                {this.props.stickers.map(item => <Sticker key={item.id}
-                                                          title={item.name}
-                                                          index={item.id}
-                                                          handleDelete={() => this.props.delSticker(item.id)}
-                                                />)
-                }
+                {this.stickersArray()}
                 <div className="list">
                     <div className="add-list">
                         {newStickerContent}
@@ -57,7 +59,7 @@ class Board extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({stickers: state.get('stickers').toJS()});
+const mapStateToProps = (state) => ({stickers: state.get('board').get('stickers').toJS()});
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
     addSticker,
     delSticker

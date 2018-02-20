@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import ItemComments from './ItemComments';
-import { getStiker } from '../../selectors/selectors';
-import { addTaskComment, delTaskComment } from '../../reducers/stickers';
+import { getTask } from '../../selectors/selectors';
+import { addTaskComment, delTaskComment } from '../../reducers/board';
 
 class Comment extends Component {
     constructor(props) {
@@ -22,9 +22,14 @@ class Comment extends Component {
     }
 
     handleSubmit() {
-        this.props.addTaskComment(this.props.stickerIndex, this.state.modalIndexItem, this.state.value);
+        this.props.addTaskComment(this.props.stickerIndex, this.props.modalIndexItem, this.state.value);
         this.setState({value: ''});
     }
+
+    itemCommentsArray = () => this.props.comments.map((item, index) => (
+        <ItemComments key={index} item={item}
+                      func={() => this.props.delTaskComment(this.props.stickerIndex, this.props.modalIndexItem, index)}
+        />));
 
     render() {
         return (
@@ -36,8 +41,7 @@ class Comment extends Component {
                     value={this.state.value}
                 />
                 <input value="Add" type="submit" onClick={this.handleSubmit}/>
-                {this.props.comments.map((item, index) => <ItemComments key={index} item={item}
-                                                                        func={() => this.props.delTaskComment(this.props.stickerIndex, this.state.modalIndexItem, index)}/>)}
+                {this.itemCommentsArray()}
             </div>
         )
     }
@@ -48,14 +52,8 @@ Comment.propTypes = {
     modalIndexItem: PropTypes.number.isRequired
 };
 
-
 const mapStateToProps = (state, ownProps) => ({
-    // comments: getStiker(state.stickers, ownProps.stickerIndex).toJS().tasks.find( taskItem => {
-    //     return taskItem.id === ownProps.modalIndexItem;
-    // }).comments
-    comments: state.get('stickers').get(state.get('stickers').findIndex((obj) => obj.get('id') === ownProps.stickerIndex)).toJS().tasks.find( taskItem => {
-            return taskItem.id === ownProps.modalIndexItem;
-        }).comments
+    comments : getTask(state, ownProps.stickerIndex, ownProps.modalIndexItem).get('comments')
 });
 
 const mapDispatchToProps = (dispatch) => (bindActionCreators({

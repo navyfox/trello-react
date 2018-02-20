@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import './Sticker.css';
 
 import ModalTask from "../ModalTask/ModalTask";
-import { addTask } from '../../reducers/stickers';
+import { addTask } from '../../reducers/board';
 import TitleSticker from './TitleSticker';
 
 class Sticker extends Component {
@@ -66,7 +66,7 @@ Sticker.propTypes = {
     title: PropTypes.string.isRequired
 };
 
-const mapStateToProps = (state) => ({stickers: state.get('stickers')});
+const mapStateToProps = (state) => ({});
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
     addTask,
 }, dispatch));

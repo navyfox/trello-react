@@ -8,7 +8,7 @@ import TitleTask from "../TitleTask/TitleTask";
 import Description from "../Description/Description";
 import Comment from "../Comment/Comment";
 import { getStiker } from "../../selectors/selectors";
-import { delTask } from "../../reducers/stickers";
+import { delTask } from "../../reducers/board";
 
 class ModalTask extends Component {
     constructor(props) {
@@ -34,11 +34,18 @@ class ModalTask extends Component {
         this.setState({showModal: false});
     }
 
+    tasksArray = () => this.props.tasks.map((item) => (
+        <li key={item.id}>
+            <a onClick={() => this.handleOpenModal(item.id)}>
+                {item.name}
+            </a>
+        </li>
+    ));
+
     render() {
         return (
             <ul>
-                {this.props.tasks.map(item => <li key={item.id}><a
-                    onClick={() => this.handleOpenModal(item.id)}>{item.name}</a></li>)}
+                {this.tasksArray()}
                 <ReactModal
                     isOpen={this.state.showModal}
                     contentLabel=""
@@ -67,7 +74,9 @@ ModalTask.propTypes = {
     index: PropTypes.number.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => ({tasks: getStiker(state, ownProps.index).toJS().tasks});
+const mapStateToProps = (state, ownProps) => ({
+    tasks: getStiker(state, ownProps.index).get('tasks').toJS()
+});
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
     delTask
 }, dispatch));

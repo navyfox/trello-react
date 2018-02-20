@@ -1,27 +1,29 @@
-import { List, fromJS} from 'immutable';
+import {fromJS} from 'immutable';
 
-const initialState = fromJS([
-    {
-        id: 0,
-        name: 'TODO',
-        tasks: []
-    },
-    {
-        id: 1,
-        name: 'In Progress',
-        tasks: []
-    },
-    {
-        id: 2,
-        name: 'Testing',
-        tasks: []
-    },
-    {
-        id: 3,
-        name: 'Done',
-        tasks: []
-    }
-]);
+const initialState = fromJS({
+    stickers: [
+        {
+            id: 0,
+            name: 'TODO',
+            tasks: []
+        },
+        {
+            id: 1,
+            name: 'In Progress',
+            tasks: []
+        },
+        {
+            id: 2,
+            name: 'Testing',
+            tasks: []
+        },
+        {
+            id: 3,
+            name: 'Done',
+            tasks: []
+        }
+    ]
+});
 const ADD_STICKER = 'ADD_STICKER';
 const DELETE_STICKER = 'DELETE_STICKER';
 const ADD_TASK = 'ADD_TASK';
@@ -32,11 +34,11 @@ const ADD_TASK_COMMENT = 'ADD_TASK_COMMENT';
 const DELETE_TASK_COMMENT = 'DELETE_TASK_COMMENT';
 
 export const addSticker = (name) => (dispatch) => {
-    const payload = fromJS({
+    const payload = {
         id: Date.now(),
         name,
-        tasks: List([])
-    });
+        tasks: []
+    };
     dispatch({
         type: 'ADD_STICKER',
         payload: payload
@@ -104,60 +106,62 @@ export const delTaskComment = (id, idTask, idComment) => (dispatch) => {
 };
 
 const ACTION_HANDLERS = {
-    [ADD_STICKER]: (state, action) => state.push(action.payload),
-    [DELETE_STICKER]: (state, action) => state.delete(state.findIndex((obj) => obj.get('id') === action.id)),
+    [ADD_STICKER]: (state, action) => state.updateIn(['stickers'], stickers => stickers.push(fromJS(action.payload))),
+    [DELETE_STICKER]: (state, action) => state.updateIn(['stickers'], stickers => {
+        return stickers.delete(stickers.findIndex((obj) => obj.get('id') === action.id));
+    }),
     [ADD_TASK]: (state, action) => {
-        const stickerIndex = state.findIndex(sticker => sticker.get('id') === action.id);
-        return state.update(stickerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
+        const stickerIndex = state.get('stickers').findIndex(sticker => sticker.get('id') === action.id);
+        return state.updateIn(['stickers'], stickers => stickers.update(stickerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
             return tasks.push(fromJS({
                 id: action.index,
                 name: action.name,
                 description: '',
                 comments: []
             }))
-        }));
+        })));
     },
     [EDIT_TASK_NAME]: (state, action) => {
-        const stickerIndex = state.findIndex(sticker => sticker.get('id') === action.id);
-        return state.update(stickerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
+        const stickerIndex = state.get('stickers').findIndex(sticker => sticker.get('id') === action.id);
+        return state.updateIn(['stickers'], stickers => stickers.update(stickerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
             const taskIndex = tasks.findIndex(task => task.get('id') === action.idTask);
-            return tasks.update(taskIndex, task => task.set('name', action.name));
-        }));
+            return tasks.update(taskIndex, task => task.set('name', fromJS(action.name)));
+        })));
     },
     [DELETE_TASK]: (state, action) => {
-        const stickerIndex = state.findIndex(sticker => sticker.get('id') === action.id);
-        return state.update(stickerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
+        const stickerIndex = state.get('stickers').findIndex(sticker => sticker.get('id') === action.id);
+        return state.updateIn(['stickers'], stickers => stickers.update(stickerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
             return tasks.delete(tasks.findIndex(obj => obj.get('id') === action.idTask))
-        }));
+        })));
     },
     [EDIT_TASK_DESCRIPTION]: (state, action) => {
-        const stickerIndex = state.findIndex(sticker => sticker.get('id') === action.id);
-        return state.update(stickerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
+        const stickerIndex = state.get('stickers').findIndex(sticker => sticker.get('id') === action.id);
+        return state.updateIn(['stickers'], stickers => stickers.update(stickerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
             const taskIndex = tasks.findIndex(task => task.get('id') === action.idTask);
-            return tasks.update(taskIndex, task => task.set('description', action.description));
-        }));
+            return tasks.update(taskIndex, task => task.set('description', fromJS(action.description)));
+        })));
     },
     [ADD_TASK_COMMENT]: (state, action) => {
-        const stickerIndex = state.findIndex(sticker => sticker.get('id') === action.id);
-        return state.update(stickerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
+        const stickerIndex = state.get('stickers').findIndex(sticker => sticker.get('id') === action.id);
+        return state.updateIn(['stickers'], stickers => stickers.update(stickerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
             const taskIndex = tasks.findIndex(task => task.get('id') === action.idTask);
             return tasks.update(taskIndex, task => task.updateIn(['comments'], comments => {
-                return comments.insert(0, action.comment);
+                return comments.insert(0, fromJS(action.comment));
             }));
-        }));
+        })));
     },
     [DELETE_TASK_COMMENT]: (state, action) => {
-        const stickerIndex = state.findIndex(sticker => sticker.get('id') === action.id);
-        return state.update(stickerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
+        const stickerIndex = state.get('stickers').findIndex(sticker => sticker.get('id') === action.id);
+        return state.updateIn(['stickers'], stickers => stickers.update(stickerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
             const taskIndex = tasks.findIndex(task => task.get('id') === action.idTask);
             return tasks.update(taskIndex, task => task.updateIn(['comments'], comments => {
                 return comments.delete(action.idComment);
             }));
-        }));
+        })));
     }
 };
 
-export default function stickers(state = initialState, action) {
+export default function board(state = initialState, action) {
     const handler = ACTION_HANDLERS[action.type];
 
     return handler ? handler(state, action) : state;

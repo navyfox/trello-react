@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux-immutable';
-import stickers from './stickers';
+import board from './board';
 
 export default combineReducers({
-    stickers
+    board
 });

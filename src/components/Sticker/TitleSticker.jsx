@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import {editTaskName} from "../../reducers/board";
+import {connect} from "react-redux";
 
 class TitleSticker extends Component {
     constructor(props) {
@@ -22,7 +24,7 @@ class TitleSticker extends Component {
     handleSubmit(event) {
         if (event.key === 'Enter') {
             // this.props.editTaskName(this.props.stickerIndex, this.props.modalIndexItem, this.state.value);
-            // this.setState({titleEdit: false});
+            this.setState({titleEdit: false});
         }
     }
 
@@ -48,4 +50,11 @@ TitleSticker.propTypes = {
     title: PropTypes.string.isRequired
 };
 
+// const mapStateToProps = (state, ownProps) => ({
+//     title: state.get('stickers').get().toJS()
+// });
+// const mapDispatchToProps = (dispatch) => (bindActionCreators({
+//     // editStickerName
+// }, dispatch));
+// export default connect(mapStateToProps, mapDispatchToProps)(TitleSticker);
 export default TitleSticker;

@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 
-import { editTaskDescription } from "../../reducers/stickers";
-import { getStiker } from "../../selectors/selectors";
+import { editTaskDescription } from "../../reducers/board";
+import { getTask } from "../../selectors/selectors";
 
 class Description extends Component {
     constructor(props) {
@@ -51,7 +51,9 @@ Description.propTypes = {
     modalIndexItem: PropTypes.number.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => ({description: getStiker(state, ownProps.stickerIndex).toJS().tasks.find(obj => obj.id === ownProps.modalIndexItem).description});
+const mapStateToProps = (state, ownProps) => ({
+    description: getTask(state, ownProps.stickerIndex, ownProps.modalIndexItem).get('description')
+});
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
     editTaskDescription
 }, dispatch));

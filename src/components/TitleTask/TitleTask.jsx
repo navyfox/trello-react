@@ -5,8 +5,8 @@ import PropTypes from "prop-types";
 
 import './TitleTask.css';
 
-import { getStiker } from "../../selectors/selectors";
-import { editTaskName } from "../../reducers/stickers";
+import { getTask } from "../../selectors/selectors";
+import { editTaskName } from "../../reducers/board";
 
 class TitleTask extends Component {
     constructor(props) {
@@ -57,7 +57,7 @@ TitleTask.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-    title: state.get('stickers').get(state.get('stickers').findIndex((obj) => obj.get('id') === ownProps.stickerIndex)).toJS().tasks.find(obj => obj.id === ownProps.modalIndexItem).name
+    title : getTask(state, ownProps.stickerIndex, ownProps.modalIndexItem).get('name')
 });
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
     editTaskName
