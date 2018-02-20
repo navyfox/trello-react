@@ -57,7 +57,7 @@ TitleTask.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-    title: getStiker(state.stickers, ownProps.stickerIndex).toJS().tasks.find(obj => obj.id === ownProps.modalIndexItem).name
+    title: state.get('stickers').get(state.get('stickers').findIndex((obj) => obj.get('id') === ownProps.stickerIndex)).toJS().tasks.find(obj => obj.id === ownProps.modalIndexItem).name
 });
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
     editTaskName

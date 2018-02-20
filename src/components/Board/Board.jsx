@@ -57,7 +57,7 @@ class Board extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({stickers: state.stickers.toJS()});
+const mapStateToProps = (state) => ({stickers: state.get('stickers').toJS()});
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
     addSticker,
     delSticker

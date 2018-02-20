@@ -24,7 +24,7 @@ class Description extends Component {
 
     handleSubmit(event) {
         if (event.key === 'Enter') {
-            this.props.editTaskDescription(this.props.index, this.props.idTask, this.state.value);
+            this.props.editTaskDescription(this.props.stickerIndex, this.props.modalIndexItem, this.state.value);
             this.setState({isEdit: false});
         }
     }
@@ -51,7 +51,7 @@ Description.propTypes = {
     modalIndexItem: PropTypes.number.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => ({description: getStiker(state.stickers, ownProps.stickerIndex).toJS().tasks.find(obj => obj.id === ownProps.modalIndexItem).description});
+const mapStateToProps = (state, ownProps) => ({description: getStiker(state, ownProps.stickerIndex).toJS().tasks.find(obj => obj.id === ownProps.modalIndexItem).description});
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
     editTaskDescription
 }, dispatch));

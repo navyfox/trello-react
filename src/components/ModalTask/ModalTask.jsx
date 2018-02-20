@@ -67,7 +67,7 @@ ModalTask.propTypes = {
     index: PropTypes.number.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => ({tasks: getStiker(state.stickers, ownProps.index).toJS().tasks});
+const mapStateToProps = (state, ownProps) => ({tasks: getStiker(state, ownProps.index).toJS().tasks});
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
     delTask
 }, dispatch));

@@ -7,6 +7,7 @@ import './Sticker.css';
 
 import ModalTask from "../ModalTask/ModalTask";
 import { addTask } from '../../reducers/stickers';
+import TitleSticker from './TitleSticker';
 
 class Sticker extends Component {
     constructor(props) {
@@ -49,7 +50,7 @@ class Sticker extends Component {
         return (
             <div className="list">
                 <header>
-                    {this.props.title}
+                    <TitleSticker title={this.props.title}/>
                     <a className="close" onClick={this.props.handleDelete}>&times;</a>
                 </header>
                 <ModalTask index={this.props.index}/>
@@ -65,7 +66,7 @@ Sticker.propTypes = {
     title: PropTypes.string.isRequired
 };
 
-const mapStateToProps = (state) => ({stickers: state.stickers});
+const mapStateToProps = (state) => ({stickers: state.get('stickers')});
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
     addTask,
 }, dispatch));

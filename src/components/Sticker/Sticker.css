@@ -13,7 +13,7 @@
 }
 
 .list {
-    width: 300px;
+    width: 320px;
     height: calc(100% - 10px - 17px);
 }
 .list > * {
@@ -27,6 +27,23 @@
     font-weight: bold;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+}
+.list header div {
+    display: inline-block;
+}
+.list header div a {
+    cursor: pointer;
+}
+.list header div textarea {
+    margin-top: 10px;
+    font-size: 14px;
+    width: 280px;
+    height: 25px;
+    border: none;
+    background-color: white;
+    border-radius: 5px;
+    resize: none;
+    outline: none;
 }
 .list footer {
     line-height: 36px;

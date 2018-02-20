@@ -1,4 +1,4 @@
-import {List, fromJS} from 'immutable';
+import { List, fromJS} from 'immutable';
 
 const initialState = fromJS([
     {
