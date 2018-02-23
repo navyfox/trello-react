@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {editTaskName} from "../../reducers/board";
-import {connect} from "react-redux";
 
 class TitleSticker extends Component {
     constructor(props) {
@@ -10,23 +8,21 @@ class TitleSticker extends Component {
             titleEdit: false,
             value: this.props.title
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChange(event) {
-        if (event.target.value === "") {
-        } else {
+    handleChange = (event) => {
+        if (event.target.value !== "" && event.target.value.length <= 33) {
             this.setState({value: event.target.value});
         }
-    }
+    };
 
-    handleSubmit(event) {
+    handleSubmit = (event) => {
         if (event.key === 'Enter') {
-            // this.props.editTaskName(this.props.stickerIndex, this.props.modalIndexItem, this.state.value);
+            this.props.editSticker(this.props.index, this.state.value);
             this.setState({titleEdit: false});
+
         }
-    }
+    };
 
     render() {
         return this.state.titleEdit ? (
@@ -47,14 +43,9 @@ class TitleSticker extends Component {
 }
 
 TitleSticker.propTypes = {
-    title: PropTypes.string.isRequired
+    index: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    editSticker: PropTypes.func.isRequired
 };
 
-// const mapStateToProps = (state, ownProps) => ({
-//     title: state.get('stickers').get().toJS()
-// });
-// const mapDispatchToProps = (dispatch) => (bindActionCreators({
-//     // editStickerName
-// }, dispatch));
-// export default connect(mapStateToProps, mapDispatchToProps)(TitleSticker);
 export default TitleSticker;

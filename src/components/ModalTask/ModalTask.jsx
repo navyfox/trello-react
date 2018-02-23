@@ -17,22 +17,20 @@ class ModalTask extends Component {
             showModal: false,
             modalIndexItem: null,
         };
-        this.handleOpenModal = this.handleOpenModal.bind(this);
-        this.handleCloseModal = this.handleCloseModal.bind(this);
     }
 
-    handleOpenModal(index) {
+    handleOpenModal = (index) => {
         this.setState({showModal: true, modalIndexItem: index});
-    }
+    };
 
-    handleCloseModal() {
+    handleCloseModal = () => {
         this.setState({showModal: false, modalIndexItem: null});
-    }
+    };
 
-    handelDeleteTask() {
+    handelDeleteTask = () => {
         this.props.delTask(this.props.index, this.state.modalIndexItem);
         this.setState({showModal: false});
-    }
+    };
 
     tasksArray = () => this.props.tasks.map((item) => (
         <li key={item.id}>

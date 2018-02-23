@@ -75,6 +75,13 @@
 .comment_link {
     cursor: pointer;
 }
+.comment_links a{
+    display: inline-block;
+    margin-right: 10px;
+}
+.comment_links div{
+    display: inline-block;
+}
 .list ul a {
     display: block;
     height: 100%;

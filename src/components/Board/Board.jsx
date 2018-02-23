@@ -15,29 +15,28 @@ class Board extends Component {
             isAddSticker: false,
             text: '',
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChange(event) {
+    handleChange = (event) => {
         if (event.target.value.length <= 33) {
             this.setState({text: event.target.value});
         }
-    }
+    };
 
-    handleSubmit(event) {
+    handleSubmit = (event) => {
         if (event.key === 'Enter') {
             this.props.addSticker(this.state.text);
             this.setState({isAddSticker: false});
         }
-    }
+    };
 
     stickersArray = () => this.props.stickers.map( (item) => (
         <Sticker key={item.id}
                  title={item.name}
                  index={item.id}
                  handleDelete={() => this.props.delSticker(item.id)}
-        />));
+        />
+    ));
 
     render() {
         let newStickerContent = this.state.isAddSticker

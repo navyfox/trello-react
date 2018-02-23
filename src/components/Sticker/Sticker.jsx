@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import './Sticker.css';
 
 import ModalTask from "../ModalTask/ModalTask";
-import { addTask } from '../../reducers/board';
+import { addTask, editSticker } from '../../reducers/board';
 import TitleSticker from './TitleSticker';
 
 class Sticker extends Component {
@@ -16,18 +16,16 @@ class Sticker extends Component {
             isAddTask: false,
             value: ''
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChange(event) {
+    handleChange = (event) => {
         this.setState({value: event.target.value});
-    }
+    };
 
-    handleSubmit() {
+    handleSubmit = () => {
         this.props.addTask(this.state.value, this.props.index);
         this.setState({isAddTask: false});
-    }
+    };
 
     render() {
         let newTaskContent = this.state.isAddTask ? (
@@ -46,11 +44,12 @@ class Sticker extends Component {
                        onClick={() => this.setState({isAddTask: false})}/>
             </footer>)
             :
-            <footer><a onClick={() => this.setState({isAddTask: true})} className="add-card">Add a card...</a></footer>;
+            <footer><a onClick={() => this.setState({isAddTask: true})}
+                       className="add-card">Add a card...</a></footer>;
         return (
             <div className="list">
                 <header>
-                    <TitleSticker title={this.props.title}/>
+                    <TitleSticker title={this.props.title} editSticker={this.props.editSticker} index={this.props.index}/>
                     <a className="close" onClick={this.props.handleDelete}>&times;</a>
                 </header>
                 <ModalTask index={this.props.index}/>
@@ -69,5 +68,6 @@ Sticker.propTypes = {
 const mapStateToProps = (state) => ({});
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
     addTask,
+    editSticker
 }, dispatch));
 export default connect(mapStateToProps, mapDispatchToProps)(Sticker);

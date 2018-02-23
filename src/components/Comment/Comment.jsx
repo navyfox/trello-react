@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import ItemComments from './ItemComments';
 import { getTask } from '../../selectors/selectors';
-import { addTaskComment, delTaskComment } from '../../reducers/board';
+import { addTaskComment } from '../../reducers/board';
 
 class Comment extends Component {
     constructor(props) {
@@ -13,23 +13,25 @@ class Comment extends Component {
         this.state = {
             value: ''
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChange(event) {
+    handleChange = (event) => {
         this.setState({value: event.target.value});
-    }
+    };
 
-    handleSubmit() {
+    handleSubmit = () => {
         this.props.addTaskComment(this.props.stickerIndex, this.props.modalIndexItem, this.state.value);
         this.setState({value: ''});
-    }
+    };
 
     itemCommentsArray = () => this.props.comments.map((item, index) => (
-        <ItemComments key={index} item={item}
-                      func={() => this.props.delTaskComment(this.props.stickerIndex, this.props.modalIndexItem, index)}
-        />));
+        <ItemComments key={index}
+                      item={item}
+                      stickerIndex={this.props.stickerIndex}
+                      modalIndexItem={this.props.modalIndexItem}
+                      index={index}
+        />
+    )).reverse();
 
     render() {
         return (
@@ -57,7 +59,6 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
-    addTaskComment,
-    delTaskComment
+    addTaskComment
 }, dispatch));
 export default connect(mapStateToProps, mapDispatchToProps)(Comment);

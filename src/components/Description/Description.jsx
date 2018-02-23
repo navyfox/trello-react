@@ -14,20 +14,18 @@ class Description extends Component {
             value: this.props.description,
             defaultValue: "Add description...",
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChange(event) {
+    handleChange = (event) => {
         this.setState({value: event.target.value});
-    }
+    };
 
-    handleSubmit(event) {
+    handleSubmit = (event) => {
         if (event.key === 'Enter') {
             this.props.editTaskDescription(this.props.stickerIndex, this.props.modalIndexItem, this.state.value);
             this.setState({isEdit: false});
         }
-    }
+    };
 
     render() {
         let text = (this.state.value === '') ? this.state.defaultValue : this.state.value;
