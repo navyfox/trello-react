@@ -3,29 +3,23 @@ import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import bindActionCreators from "redux/es/bindActionCreators";
 import {delTaskComment, editTaskComment} from "../../reducers/board";
-import {getTask} from "../../selectors/selectors";
+import {getComment} from "../../selectors/selectors";
 
 class ItemComments extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isEdit: false,
-            value: this.props.comment
+            isEdit: false
         };
-        console.log('this.props.comment', this.props.index);
     }
 
     handleEdit = () => {
         this.setState({isEdit: true});
     };
 
-    handleChange = (event) => {
-        this.setState({value: event.target.value});
-    };
-
     handleSubmit = (event) => {
         if (event.key === 'Enter') {
-            this.props.editTaskComment(this.props.stickerIndex, this.props.modalIndexItem, this.props.index, this.state.value);
+            this.props.editTaskComment(this.props.stickerIndex, this.props.modalIndexItem, this.props.index, event.target.value);
             this.setState({isEdit: false});
         }
     };
@@ -39,13 +33,13 @@ class ItemComments extends Component {
             (<div className="description-block">
                 <textarea
                     name="commentItem"
-                    value={this.state.value}
+                    defaultValue={this.props.comment}
                     onChange={this.handleChange}
                     onKeyPress={this.handleSubmit}
                 />
             </div>)
             :
-            (<div className="comment_item">{this.props.item}</div>);
+            (<div className="comment_item"><span>{this.props.comment}</span></div>);
         return (
             <div className="comment">
                 {commentItem}
@@ -67,7 +61,7 @@ ItemComments.propTypes = {
 
 const mapStateToProps = (state, ownProps) => ({
     userName : state.getIn(['board', 'userName']),
-    comment : getTask(state, ownProps.stickerIndex, ownProps.modalIndexItem).get('comments').get(ownProps.index)
+    comment : getComment(state, ownProps.stickerIndex, ownProps.modalIndexItem, ownProps.index).get('comment')
 });
 const mapDispatchToProps = (dispatch) => (bindActionCreators({
     editTaskComment,

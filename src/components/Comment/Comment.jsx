@@ -24,12 +24,12 @@ class Comment extends Component {
         this.setState({value: ''});
     };
 
-    itemCommentsArray = () => this.props.comments.map((item, index) => (
-        <ItemComments key={index}
-                      item={item}
+    itemCommentsArray = () => this.props.comments.map((item) => (
+        <ItemComments key={item.id}
+                      item={item.comment}
                       stickerIndex={this.props.stickerIndex}
                       modalIndexItem={this.props.modalIndexItem}
-                      index={index}
+                      index={item.id}
         />
     )).reverse();
 
@@ -55,7 +55,7 @@ Comment.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-    comments : getTask(state, ownProps.stickerIndex, ownProps.modalIndexItem).get('comments')
+    comments : getTask(state, ownProps.stickerIndex, ownProps.modalIndexItem).get('comments').toJS()
 });
 
 const mapDispatchToProps = (dispatch) => (bindActionCreators({

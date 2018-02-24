@@ -180,7 +180,10 @@ const ACTION_HANDLERS = {
         return state.updateIn(['stickers'], stickers => stickers.update(stickerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
             const taskIndex = tasks.findIndex(task => task.get('id') === action.idTask);
             return tasks.update(taskIndex, task => task.updateIn(['comments'], comments => {
-                return comments.push(fromJS(action.comment));
+                return comments.push(fromJS({
+                    id: Date.now(),
+                    comment: action.comment
+                }));
             }));
         })));
     },
@@ -189,7 +192,8 @@ const ACTION_HANDLERS = {
         return state.updateIn(['stickers'], stickers => stickers.update(stickerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
             const taskIndex = tasks.findIndex(task => task.get('id') === action.idTask);
             return tasks.update(taskIndex, task => task.updateIn(['comments'], comments => {
-                return comments.set(action.idComment, fromJS(action.comment));
+                const commentIndex = comments.findIndex(comment => comment.get('id') === action.idComment);
+                return comments.update(commentIndex, comment => comment.set('comment', fromJS(action.comment)));
             }));
         })));
     },
@@ -198,7 +202,8 @@ const ACTION_HANDLERS = {
         return state.updateIn(['stickers'], stickers => stickers.update(stickerIndex, sticker => sticker.updateIn(['tasks'], tasks => {
             const taskIndex = tasks.findIndex(task => task.get('id') === action.idTask);
             return tasks.update(taskIndex, task => task.updateIn(['comments'], comments => {
-                return comments.delete(action.idComment);
+                const commentIndex = comments.findIndex(comment => comment.get('id') === action.idComment);
+                return comments.delete(commentIndex);
             }));
         })));
     }
